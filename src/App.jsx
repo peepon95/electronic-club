@@ -12,10 +12,7 @@ const C = {
   ink: "#171719",
 };
 
-const FLOWER_MARK =
-  "https://raw.githubusercontent.com/peepon95/electronic-club/main/public/wallflower-club-logo-v2-rustic.png";
-const COMMUNITY_PHOTO =
-  "https://raw.githubusercontent.com/peepon95/electronic-club/main/public/wallflower-project-community-hero.png";
+const FLOWER_MARK = "/wallflower-project-flower-transparent.png";
 
 const GUIDES = [
   {
@@ -142,7 +139,7 @@ function Hero() {
         <div style={S.heroCopy}>
           <div style={S.eyebrow}>A SMALL KL COMMUNITY FOR TIRED, CURIOUS ADULTS</div>
           <h1 className="wf-h1" style={S.h1}>
-            MAKE SOMETHING.<br />MEET SOMEONE.
+            DO SOMETHING.<br />MEET SOMEONE.
           </h1>
           <p style={S.heroP}>
             Burnt out? Same. Wallflower Project is a small monthly gathering where we
@@ -160,13 +157,6 @@ function Hero() {
           <div style={S.houseLine}>
             <span style={S.houseDot} /> hands busy, guard down.
           </div>
-        </div>
-        <div style={S.heroVisual}>
-          <img
-            src={COMMUNITY_PHOTO}
-            alt="A small group of Malaysian adults building electronics together around a workshop table"
-            style={S.heroPhoto}
-          />
         </div>
       </div>
     </header>
@@ -668,9 +658,6 @@ function StyleTag() {
       }
       @media (max-width: 1040px) {
         .wf-nav-links a:not(:last-child) { display: none !important; }
-        .wf-hero-grid { grid-template-columns: 1fr !important; }
-        .wf-hero-grid > div:first-child { text-align: center !important; }
-        .wf-hero-grid > div:first-child > div { justify-content: center; }
         .wf-community, .wf-story-grid { grid-template-columns: 1fr !important; }
         .wf-story-grid { gap: 36px !important; }
       }
@@ -702,28 +689,26 @@ const S = {
     justifyContent: "space-between", padding: "12px 28px", background: `${C.cream}f2`,
     backdropFilter: "blur(9px)",
   },
-  brand: { display: "flex", alignItems: "center", gap: 10, color: C.ink },
-  logoCrop: { width: 48, height: 48, display: "flex", alignItems: "center", justifyContent: "center", overflow: "hidden", background: C.cream, flexShrink: 0 },
-  logoCropImage: { width: 70, height: 70, maxWidth: "none", display: "block", transform: "translate(-11px, -4px)" },
+  brand: { display: "flex", alignItems: "center", gap: 12, color: C.ink },
+  logoCrop: { width: 50, height: 50, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 },
+  logoCropImage: { width: "100%", height: "100%", display: "block", objectFit: "contain" },
   brandName: { fontFamily: "var(--display)", fontSize: 21, letterSpacing: 1.1 },
   navLinks: { display: "flex", alignItems: "center", gap: 22 },
   navLink: { color: C.blue, fontWeight: 700, fontSize: 14 },
   navBtn: { background: C.coral, color: C.ink, padding: "11px 20px", borderRadius: 999, fontFamily: "var(--display)", fontSize: 15, letterSpacing: 1 },
 
   hero: { padding: "78px 30px 72px", position: "relative", overflow: "hidden" },
-  heroGrid: { ...wrap, display: "grid", gridTemplateColumns: "1.18fr .82fr", gap: 60, alignItems: "center" },
-  heroCopy: { position: "relative", zIndex: 2 },
+  heroGrid: { ...wrap, display: "grid", gridTemplateColumns: "1fr", alignItems: "center" },
+  heroCopy: { position: "relative", zIndex: 2, maxWidth: 920, margin: "0 auto", textAlign: "center" },
   eyebrow: { display: "inline-block", fontWeight: 700, fontSize: 12, letterSpacing: 1.7, textTransform: "uppercase", marginBottom: 20, color: C.coralText },
   h1: { fontFamily: "var(--display)", fontSize: 100, lineHeight: .9, letterSpacing: .5, margin: "0 0 28px", color: C.blue, textTransform: "uppercase" },
-  heroP: { fontSize: 19, lineHeight: 1.62, maxWidth: 650, margin: "0 0 14px", color: C.ink },
-  heroNote: { fontSize: 15, lineHeight: 1.55, maxWidth: 590, margin: "0 0 30px", color: `${C.ink}a8` },
-  heroCtas: { display: "flex", gap: 14, flexWrap: "wrap", marginBottom: 28 },
+  heroP: { fontSize: 19, lineHeight: 1.62, maxWidth: 720, margin: "0 auto 14px", color: C.ink },
+  heroNote: { fontSize: 15, lineHeight: 1.55, maxWidth: 620, margin: "0 auto 30px", color: `${C.ink}a8` },
+  heroCtas: { display: "flex", justifyContent: "center", gap: 14, flexWrap: "wrap", marginBottom: 28 },
   primaryBtn: { background: C.coral, color: C.ink, padding: "15px 32px", borderRadius: 999, fontFamily: "var(--display)", fontSize: 18, letterSpacing: 1, display: "inline-block" },
   ghostBtn: { background: "transparent", color: C.blue, padding: "13px 28px", borderRadius: 999, border: `2px solid ${C.blue}`, fontWeight: 700, fontSize: 16, display: "inline-block" },
-  houseLine: { display: "flex", alignItems: "center", gap: 10, fontWeight: 700, fontSize: 14, color: C.blue },
+  houseLine: { display: "flex", alignItems: "center", justifyContent: "center", gap: 10, fontWeight: 700, fontSize: 14, color: C.blue },
   houseDot: { width: 10, height: 10, borderRadius: "50%", background: C.coral },
-  heroVisual: { position: "relative", maxWidth: 520, width: "100%", margin: "0 auto" },
-  heroPhoto: { display: "block", width: "100%", aspectRatio: "16 / 10", objectFit: "cover", objectPosition: "center", borderRadius: 24 },
 
   strip: { background: C.blue, color: C.cream, padding: "14px 0", overflow: "hidden", whiteSpace: "nowrap" },
   stripTrack: { display: "inline-flex", gap: 44, animation: "scroll-x 32s linear infinite", willChange: "transform" },
