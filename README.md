@@ -1,6 +1,7 @@
-# Solder Sisters
+# Wallflower Club
 
-A ladies-first hardware build club site. Vite + React, single-component, styled inline (no CSS framework, no build config to fuss with).
+A small KL community that helps tired, curious adults connect by making things
+together. Vite + React, single-page, styled inline.
 
 ## Run it locally
 
@@ -22,9 +23,9 @@ npm run preview    # preview the production build locally
 
 It's a static Vite site, so any static host works.
 
-**Vercel / Netlify (easiest):**
+**Vercel:**
 1. Push this folder to a GitHub repo.
-2. Import it in Vercel or Netlify.
+2. Import it in Vercel.
 3. Framework preset: **Vite** · Build command: `npm run build` · Output dir: `dist`
 4. Add your custom domain in their dashboard.
 
@@ -81,13 +82,13 @@ permission to read the email list. The guide unlocks only after Supabase accepts
 the signup, and the browser remembers the unlock for future visits.
 
 The homepage **Save my spot** form also writes to this table. Its rows use
-`meetup-waitlist` as `guide_id` and `Next meetup waitlist` as `guide_title`, so
+`meetup-waitlist` as `guide_id` and `Wallflower Club meetup waitlist` as `guide_title`, so
 they are easy to filter separately from guide downloads.
 
-## ⚠️ Before you truly launch — 1 thing is still a placeholder
+## Before taking paid reservations
 
-### The RM 15 fee has no payment
-There's no payment attached anywhere. Add a **Stripe Payment Link** (or your preferred MY option) — either on the signup button or sent after someone registers.
+The site describes a small commitment fee but does not collect payment yet. Add a
+payment link only after the fee and meetup logistics are final.
 
 ---
 
@@ -96,11 +97,12 @@ There's no payment attached anywhere. Add a **Stripe Payment Link** (or your pre
 - `GUIDES` array (top of file) — edit build titles, blurbs, parts lists here
 - `Hero` — headline + intro copy
 - `HowItWorks` — the 3 steps
-- `Guides` — the build cards + email gate entry
-- `Community`, `FAQ` — copy blocks
+- `WhatWeMake` — the build cards + email gate entry
+- `Story`, `Community`, `FAQ` — the core brand and community copy
 - `FinalCTA` — the main signup form
-- `Chip` / `ChipField` — the hand-drawn microchip motif (the signature graphic)
-- `C` object (top) — the two brand colors (blue + cream)
+- `ConnectionGlyph` — the flower, circuit, and human-connection motif
+- `C` object (top) — cobalt, cream, and coral brand colors
 - `S` object (bottom) — all styles
 
-The name **Solder Sisters** and the `hello@soldersisters.club` email are placeholders — swap freely.
+The founder intro, social destinations, and `hello@wallflowerclub.my` address are
+placeholders until the final profiles and domain are ready.
