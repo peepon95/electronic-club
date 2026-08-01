@@ -12,7 +12,8 @@ const C = {
   ink: "#171719",
 };
 
-const LOGO = "/wallflower-club-logo-v2-rustic.png";
+const LOGO =
+  "https://raw.githubusercontent.com/peepon95/electronic-club/main/public/wallflower-club-logo-v2-rustic.png";
 
 const GUIDES = [
   {
