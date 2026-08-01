@@ -282,10 +282,6 @@ function Community() {
 function FAQ() {
   const qs = [
     {
-      q: "who runs this?",
-      a: "Hi, I'm Ee! I've run a few AI events in the past, but a ruptured Achilles tendon kept me at home more and that's when I got into building electronics. It's been lonely building alone. This is my little experiment to create a space where we can come together and build something. I'm not a professional engineer, so I'm learning and building right alongside you.",
-    },
-    {
       q: "why does this space exist?",
       a: "Because it's hard to build alone. I wanted a space for ladies to come together and make more, combining vibe coding with real hardware. It's more fun, and you get way further, when you're figuring it out in a room full of people who are just as curious.",
     },
