@@ -28,6 +28,11 @@ It's a static Vite site, so any static host works.
 3. Framework preset: **Vite** · Build command: `npm run build` · Output dir: `dist`
 4. Add your custom domain in their dashboard.
 
+The current live guide and Supabase publishable client settings have safe public
+defaults in `src/config.js`, so they are included in every static deployment.
+Hosting environment variables are optional overrides; when you change one, trigger
+a new build because Vite reads them at build time.
+
 ---
 
 ## Connect the live Google Doc guides
@@ -39,9 +44,10 @@ the original Google Doc and visitors always see the latest version.
 1. Create each guide in Google Docs.
 2. Click **Share** and set **General access** to **Anyone with the link · Viewer**.
    Do not give public edit access.
-3. Copy `.env.example` to `.env`.
+3. To replace the current guide, copy `.env.example` to `.env`.
 4. Paste each normal Google Docs Share URL into the matching variable.
-5. Restart `npm run dev` after changing `.env`.
+5. Restart `npm run dev` after changing `.env`; Vite does not reload environment
+   variables in a server that is already running.
 
 The app converts each Share URL into safe view, copy, and PDF-download links.
 

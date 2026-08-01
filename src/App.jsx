@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { supabase, supabaseConfigured } from "./supabase";
+import { siteConfig } from "./config";
 
 // ============================================================
 //  SOLDER SISTERS — ladies-first hardware build club
@@ -24,7 +25,7 @@ const GUIDES = [
     blurb:
       "Build your own cyberdeck from scratch. In part one we set up the core: the board, the screen, the power, and get it booting. You leave with a little machine that's truly yours.",
     kit: "Raspberry Pi (or similar) · small display · keyboard · power bank · case bits",
-    guideUrl: import.meta.env.VITE_CYBERDECK_PART_1_GUIDE_URL?.trim(),
+    guideUrl: siteConfig.guides.cyberdeckPart1,
   },
   {
     id: "cyberdeck-2",
@@ -34,7 +35,7 @@ const GUIDES = [
     blurb:
       "Now the fun part. We build on your setup and load it up with games, installing, tinkering, and making it feel like your own handheld. Part one first, then this.",
     kit: "Your part-one cyberdeck · SD card · a game or two you love",
-    guideUrl: import.meta.env.VITE_CYBERDECK_PART_2_GUIDE_URL?.trim(),
+    guideUrl: siteConfig.guides.cyberdeckPart2,
   },
   {
     id: "coming-soon",

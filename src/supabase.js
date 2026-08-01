@@ -1,7 +1,7 @@
 import { createClient } from "@supabase/supabase-js";
+import { siteConfig } from "./config";
 
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL?.trim();
-const supabasePublishableKey = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY?.trim();
+const { supabaseUrl, supabasePublishableKey } = siteConfig;
 
 export const supabaseConfigured = Boolean(supabaseUrl && supabasePublishableKey);
 
