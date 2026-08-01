@@ -12,8 +12,10 @@ const C = {
   ink: "#171719",
 };
 
-const LOGO =
+const FLOWER_MARK =
   "https://raw.githubusercontent.com/peepon95/electronic-club/main/public/wallflower-club-logo-v2-rustic.png";
+const COMMUNITY_PHOTO =
+  "https://raw.githubusercontent.com/peepon95/electronic-club/main/public/wallflower-project-community-hero.png";
 
 const GUIDES = [
   {
@@ -69,6 +71,7 @@ export default function App() {
   const [guideEmail, setGuideEmail] = useState(() => {
     try {
       return (
+        window.localStorage.getItem("wallflower-project-guide-email") ||
         window.localStorage.getItem("wallflower-club-guide-email") ||
         window.localStorage.getItem("solder-sisters-guide-email") ||
         ""
@@ -81,7 +84,7 @@ export default function App() {
   const unlockGuides = (email) => {
     setGuideEmail(email);
     try {
-      window.localStorage.setItem("wallflower-club-guide-email", email);
+      window.localStorage.setItem("wallflower-project-guide-email", email);
     } catch {
       // The guide still unlocks when browser storage is unavailable.
     }
@@ -116,9 +119,9 @@ export default function App() {
 function Nav() {
   return (
     <nav style={S.nav}>
-      <a href="#top" style={S.brand} aria-label="Wallflower Club home">
+      <a href="#top" style={S.brand} aria-label="Wallflower Project home">
         <LogoCrop />
-        <span style={S.brandName}>WALLFLOWER CLUB</span>
+        <span style={S.brandName}>WALLFLOWER PROJECT</span>
       </a>
       <div className="wf-nav-links" style={S.navLinks}>
         <a href="#how" style={S.navLink}>how it works</a>
@@ -142,7 +145,7 @@ function Hero() {
             MAKE SOMETHING.<br />MEET SOMEONE.
           </h1>
           <p style={S.heroP}>
-            Burnt out? Same. Wallflower Club is a small monthly gathering where we
+            Burnt out? Same. Wallflower Project is a small monthly gathering where we
             make something real with our hands and actually meet each other doing it —
             no small talk required. First up: build your own cyberdeck. No experience
             needed. Just show up curious.
@@ -159,13 +162,11 @@ function Hero() {
           </div>
         </div>
         <div style={S.heroVisual}>
-          <div style={S.logoCardBack} />
-          <div style={S.logoCard}>
-            <img src={LOGO} alt="Wallflower Club rustic hibiscus logo" style={S.heroLogo} />
-          </div>
-          <div style={S.heroDoodle} aria-hidden="true">
-            <ConnectionGlyph size={120} tone="coral" />
-          </div>
+          <img
+            src={COMMUNITY_PHOTO}
+            alt="A small group of Malaysian adults building electronics together around a workshop table"
+            style={S.heroPhoto}
+          />
         </div>
       </div>
     </header>
@@ -279,7 +280,6 @@ function Story() {
         <div style={S.storyTitleWrap}>
           <div style={{ ...S.sectionLabel, color: C.ink }}>· the honest bit ·</div>
           <h2 className="wf-h2" style={{ ...S.h2, color: C.ink }}>WHY<br />“WALLFLOWER”?</h2>
-          <img src={LOGO} alt="" aria-hidden="true" style={S.storyLogo} />
         </div>
         <div style={S.storyCopy}>
           <p style={S.storyLead}>Because I am one.</p>
@@ -289,7 +289,7 @@ function Story() {
             to connect but not knowing how. Building alone at home got lonely the same way.
           </p>
           <p style={S.storyP}>
-            So Wallflower Club is the room I wished existed: one where you don't have
+            So Wallflower Project is the room I wished existed: one where you don't have
             to be good at mingling, because we give you something to do together instead.
             You make something with your hands, we quietly pair you with someone to
             actually talk to, and the awkward part takes care of itself. A club for the
@@ -417,7 +417,7 @@ function FinalCTA({ joined, setJoined }) {
       const { error } = await supabase.from("guide_signups").insert({
         email: email.trim().toLowerCase(),
         guide_id: "meetup-waitlist",
-        guide_title: "Wallflower Club meetup waitlist",
+        guide_title: "Wallflower Project meetup waitlist",
       });
 
       if (error) throw error;
@@ -462,12 +462,6 @@ function FinalCTA({ joined, setJoined }) {
         {errorMessage && <div style={S.errorText}>{errorMessage}</div>}
         <div style={S.finalAccent}>come stand by the wall with us.</div>
       </div>
-      <div style={S.finalGlyphs} aria-hidden="true">
-        <ConnectionGlyph size={120} />
-        <ConnectionGlyph size={82} tone="coral" />
-        <ConnectionGlyph size={150} />
-        <ConnectionGlyph size={70} tone="coral" />
-      </div>
     </section>
   );
 }
@@ -476,8 +470,7 @@ function Footer() {
   return (
     <footer style={S.footer}>
       <div style={S.footerBrand}>
-        <LogoCrop invert />
-        <span style={S.brandName}>WALLFLOWER CLUB</span>
+        <span style={S.brandName}>WALLFLOWER PROJECT</span>
       </div>
       <p style={S.footerNote}>
         A small KL community for burnt-out adults who'd rather make something than
@@ -486,9 +479,9 @@ function Footer() {
       <div style={S.footerLinks}>
         <span>Instagram</span>
         <span>Discord</span>
-        <span>hello@wallflowerclub.my</span>
+        <span>hello@wallflowerproject.my</span>
       </div>
-      <div style={S.footerFine}>© 2026 Wallflower Club · hands busy, guard down.</div>
+      <div style={S.footerFine}>© 2026 Wallflower Project · hands busy, guard down.</div>
     </footer>
   );
 }
@@ -512,10 +505,10 @@ function Quote({ text, who }) {
   );
 }
 
-function LogoCrop({ invert = false }) {
+function LogoCrop() {
   return (
-    <span style={{ ...S.logoCrop, borderColor: invert ? C.cream : C.blue }} aria-hidden="true">
-      <img src={LOGO} alt="" style={S.logoCropImage} />
+    <span style={S.logoCrop} aria-hidden="true">
+      <img src={FLOWER_MARK} alt="" style={S.logoCropImage} />
     </span>
   );
 }
@@ -707,11 +700,11 @@ const S = {
   nav: {
     position: "sticky", top: 0, zIndex: 50, display: "flex", alignItems: "center",
     justifyContent: "space-between", padding: "12px 28px", background: `${C.cream}f2`,
-    backdropFilter: "blur(9px)", borderBottom: `2px solid ${C.blue}`,
+    backdropFilter: "blur(9px)",
   },
   brand: { display: "flex", alignItems: "center", gap: 10, color: C.ink },
-  logoCrop: { width: 44, height: 44, display: "block", overflow: "hidden", borderRadius: 12, border: "2px solid", background: C.cream, flexShrink: 0 },
-  logoCropImage: { width: 64, height: 64, maxWidth: "none", display: "block", transform: "translate(-10px, -3px)" },
+  logoCrop: { width: 48, height: 48, display: "flex", alignItems: "center", justifyContent: "center", overflow: "hidden", background: C.cream, flexShrink: 0 },
+  logoCropImage: { width: 70, height: 70, maxWidth: "none", display: "block", transform: "translate(-11px, -4px)" },
   brandName: { fontFamily: "var(--display)", fontSize: 21, letterSpacing: 1.1 },
   navLinks: { display: "flex", alignItems: "center", gap: 22 },
   navLink: { color: C.blue, fontWeight: 700, fontSize: 14 },
@@ -729,11 +722,8 @@ const S = {
   ghostBtn: { background: "transparent", color: C.blue, padding: "13px 28px", borderRadius: 999, border: `2px solid ${C.blue}`, fontWeight: 700, fontSize: 16, display: "inline-block" },
   houseLine: { display: "flex", alignItems: "center", gap: 10, fontWeight: 700, fontSize: 14, color: C.blue },
   houseDot: { width: 10, height: 10, borderRadius: "50%", background: C.coral },
-  heroVisual: { position: "relative", maxWidth: 470, width: "100%", margin: "0 auto", padding: "14px" },
-  logoCardBack: { position: "absolute", inset: "30px 0 0 30px", background: C.coral, borderRadius: 28, transform: "rotate(5deg)" },
-  logoCard: { position: "relative", border: `3px solid ${C.ink}`, borderRadius: 24, overflow: "hidden", background: "#FAF8F2", transform: "rotate(-2deg)", boxShadow: `10px 10px 0 ${C.blue}` },
-  heroLogo: { display: "block", width: "100%", height: "auto" },
-  heroDoodle: { position: "absolute", right: -28, bottom: -38, transform: "rotate(12deg)", zIndex: 3 },
+  heroVisual: { position: "relative", maxWidth: 520, width: "100%", margin: "0 auto" },
+  heroPhoto: { display: "block", width: "100%", aspectRatio: "16 / 10", objectFit: "cover", objectPosition: "center", borderRadius: 24 },
 
   strip: { background: C.blue, color: C.cream, padding: "14px 0", overflow: "hidden", whiteSpace: "nowrap" },
   stripTrack: { display: "inline-flex", gap: 44, animation: "scroll-x 32s linear infinite", willChange: "transform" },
@@ -767,7 +757,6 @@ const S = {
   story: { background: C.coral, padding: "110px 30px" },
   storyGrid: { ...wrap, display: "grid", gridTemplateColumns: ".8fr 1.2fr", gap: 70, alignItems: "start" },
   storyTitleWrap: { position: "sticky", top: 110 },
-  storyLogo: { width: 230, maxWidth: "60%", borderRadius: 20, marginTop: 30, border: `2px solid ${C.ink}`, transform: "rotate(-3deg)", mixBlendMode: "multiply" },
   storyCopy: { color: C.ink },
   storyLead: { fontFamily: "var(--display)", fontSize: 38, margin: "0 0 16px", textTransform: "uppercase" },
   storyP: { fontSize: 19, lineHeight: 1.72, margin: "0 0 24px" },
@@ -800,7 +789,6 @@ const S = {
   successBox: { border: `2px solid ${C.blue}`, borderRadius: 18, padding: "18px 24px", fontWeight: 700, maxWidth: 520, margin: "0 auto 22px", color: C.blue },
   errorText: { fontWeight: 700, marginTop: 12, fontSize: 15, color: C.blue },
   finalAccent: { color: C.coralText, fontFamily: "var(--display)", fontSize: 21, marginTop: 28 },
-  finalGlyphs: { display: "flex", alignItems: "center", justifyContent: "center", gap: 18, opacity: .22, marginTop: 44, marginBottom: -40 },
 
   footer: { background: C.ink, color: C.cream, padding: "58px 30px 42px", textAlign: "center" },
   footerBrand: { display: "inline-flex", alignItems: "center", gap: 10, marginBottom: 16 },

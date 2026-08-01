@@ -1,4 +1,4 @@
-# Wallflower Club
+# Wallflower Project
 
 A small KL community that helps tired, curious adults connect by making things
 together. Vite + React, single-page, styled inline.
@@ -82,7 +82,7 @@ permission to read the email list. The guide unlocks only after Supabase accepts
 the signup, and the browser remembers the unlock for future visits.
 
 The homepage **Save my spot** form also writes to this table. Its rows use
-`meetup-waitlist` as `guide_id` and `Wallflower Club meetup waitlist` as `guide_title`, so
+`meetup-waitlist` as `guide_id` and `Wallflower Project meetup waitlist` as `guide_title`, so
 they are easy to filter separately from guide downloads.
 
 ## Before taking paid reservations
@@ -104,5 +104,5 @@ payment link only after the fee and meetup logistics are final.
 - `C` object (top) — cobalt, cream, and coral brand colors
 - `S` object (bottom) — all styles
 
-The founder intro, social destinations, and `hello@wallflowerclub.my` address are
+The founder intro, social destinations, and `hello@wallflowerproject.my` address are
 placeholders until the final profiles and domain are ready.
