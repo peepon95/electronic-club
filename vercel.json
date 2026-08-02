@@ -1,0 +1,8 @@
+{
+  "rewrites": [
+    {
+      "source": "/cyberdeck-workshop",
+      "destination": "/"
+    }
+  ]
+}

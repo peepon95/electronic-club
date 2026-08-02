@@ -19,6 +19,21 @@ npm run build      # outputs static files to /dist
 npm run preview    # preview the production build locally
 ```
 
+## Cyberdeck workshop page
+
+The participant-facing guide lives at `/cyberdeck-workshop`. It covers the
+known-good equipment, session flow, setup checkpoints, Raspberry Pi compatibility,
+game customisation with Codex, troubleshooting, and safe shutdown. The homepage
+links to it from both the navigation and the Cyberdeck Part 1 card.
+
+`VITE_CYBERDECK_REPOSITORY_URL` controls the page's source and latest Release
+buttons. Keep the download button pointed at a tested GitHub Release rather than
+the moving `main` branch.
+
+The current page labels `v0.1.0-test` as an independent-testing build. Update
+that wording when a fresh-card test is complete and the first workshop-ready
+release is published.
+
 ## Deploy
 
 It's a static Vite site, so any static host works.

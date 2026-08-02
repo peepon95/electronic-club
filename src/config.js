@@ -21,4 +21,8 @@ export const siteConfig = {
     ),
     cyberdeckPart2: import.meta.env.VITE_CYBERDECK_PART_2_GUIDE_URL?.trim(),
   },
+  cyberdeckRepository: publicDefault(
+    import.meta.env.VITE_CYBERDECK_REPOSITORY_URL,
+    "https://github.com/peepon95/cyberdeck",
+  ),
 };
