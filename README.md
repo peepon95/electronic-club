@@ -23,12 +23,13 @@ npm run preview    # preview the production build locally
 
 The participant-facing guide lives at `/cyberdeck-workshop`. It covers the
 equipment, a seven-step Part 1 setup, Raspberry Pi compatibility, choosing two
-included games, Workshop Part 2 signup, troubleshooting, and safe shutdown. The homepage
+included games, safe shutdown, and Workshop Part 2 signup. The homepage
 links to it from both the navigation and the Cyberdeck Part 1 card.
 
 `VITE_CYBERDECK_REPOSITORY_URL` controls the page's source and workshop download
 buttons. The participant button points directly to `cyberdeck-workshop.zip` in
-the latest GitHub Release rather than the moving `main` branch.
+the latest GitHub Release rather than the moving `main` branch. Visitors enter
+their email through the guide's download gate before the file is released.
 
 The installation section mirrors the release README: download the ZIP, run the
 software checks, choose apps, install, reboot and shut down safely.

@@ -220,7 +220,12 @@ body {
   font-size: 17px;
   letter-spacing: 0.8px;
   text-align: center;
+  cursor: pointer;
   transition: transform 160ms ease, box-shadow 160ms ease;
+}
+
+.cd-page button.cd-button {
+  font-family: var(--cd-display);
 }
 
 .cd-button:hover {
@@ -753,55 +758,6 @@ body {
   text-align: center;
 }
 
-.cd-help-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 12px;
-}
-
-.cd-help-item {
-  border: 2px solid var(--cd-card-border);
-  border-radius: var(--cd-card-radius);
-  background: var(--cd-card-bg);
-}
-
-.cd-help-item summary {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 20px;
-  padding: 20px;
-  color: var(--cd-blue);
-  cursor: pointer;
-  font-family: var(--cd-display);
-  font-size: 20px;
-  line-height: 1.2;
-  list-style: none;
-  text-transform: uppercase;
-}
-
-.cd-help-item summary::-webkit-details-marker {
-  display: none;
-}
-
-.cd-help-item summary span {
-  color: var(--cd-coral-text);
-  font-family: var(--cd-body);
-  font-size: 27px;
-  font-weight: 400;
-  transition: transform 160ms ease;
-}
-
-.cd-help-item[open] summary span {
-  transform: rotate(45deg);
-}
-
-.cd-help-item p {
-  margin: 0;
-  padding: 0 20px 20px;
-  line-height: 1.65;
-}
-
 .cd-next {
   text-align: center;
 }
@@ -818,6 +774,66 @@ body {
   margin: 28px auto;
   font-size: 18px;
   line-height: 1.7;
+}
+
+.cd-download-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 500;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  overflow-y: auto;
+  background: rgba(23, 23, 25, 0.72);
+  backdrop-filter: blur(8px);
+}
+
+.cd-download-dialog {
+  position: relative;
+  width: min(680px, 100%);
+  padding: clamp(28px, 5vw, 48px);
+  border: 2px solid var(--cd-card-border);
+  border-radius: calc(var(--cd-card-radius) + 6px);
+  background: var(--cd-card-bg);
+  box-shadow: 10px 10px 0 var(--cd-coral);
+}
+
+.cd-download-close {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  border: 2px solid var(--cd-ink);
+  border-radius: 50%;
+  background: var(--cd-cream);
+  color: var(--cd-ink);
+  cursor: pointer;
+  font-size: 25px;
+  line-height: 1;
+}
+
+.cd-download-dialog h2 {
+  margin: 0;
+  color: var(--cd-blue);
+  font-family: var(--cd-display);
+  font-size: clamp(48px, 8vw, 78px);
+  font-weight: 400;
+  line-height: 0.96;
+  text-transform: uppercase;
+}
+
+.cd-download-dialog > p:not(.cd-note-label) {
+  margin: 20px 0 0;
+  font-size: 17px;
+  line-height: 1.65;
+}
+
+.cd-download-form {
+  max-width: none;
+  margin-top: 24px;
 }
 
 .cd-footer {
@@ -908,7 +924,6 @@ body {
     font-size: 24px;
   }
 
-  .cd-help-grid,
   .cd-os-grid,
   .cd-compat-list,
   .cd-games-grid {
@@ -950,8 +965,7 @@ body {
     scroll-behavior: auto;
   }
 
-  .cd-button,
-  .cd-help-item summary span {
+  .cd-button {
     transition: none;
   }
 }

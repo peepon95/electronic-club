@@ -67,15 +67,6 @@ const includedGames = [
 
 const validEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
-const troubleshooting = [
-  ["SSH cannot find the hostname", "Check that the Pi and laptop use the same network. If local names fail, find the Pi's IP in the router or hotspot device list and use that address."],
-  ["Host key changed after reflashing", "Remove only the saved key for that hostname with ssh-keygen -R yourhostname.local, then reconnect and verify the new key."],
-  ["Screen stays white", "The games are written in Python, but a white screen happens before the Python menu can draw. Shut down, disconnect power, reseat the linked screen carefully, reconnect by SSH and rerun the display setup for this exact screen."],
-  ["Touches land in the wrong place", "Use the calibration instructions linked on the Cytron screen page. Do not copy another participant's calibration numbers; each screen can differ."],
-  ["Optional keyboard is missing", "Finish the first workshop using SSH and touch. Later, a wired keyboard needs the Pi's USB data port and an OTG adapter; Bluetooth models need pairing and enough battery."],
-  ["A game is slow", "Keep graphics and per-frame work simple. Test each change on the Pi, not only on the laptop."],
-];
-
 function Code({ children, label }) {
   const [copied, setCopied] = React.useState(false);
   const command = React.Children.toArray(children).join("");
@@ -111,6 +102,85 @@ function SectionTitle({ kicker, children }) {
       <p>{kicker}</p>
       <h2>{children}</h2>
     </header>
+  );
+}
+
+function DownloadGate({ open, onClose, onDownload }) {
+  const [email, setEmail] = React.useState("");
+  const [message, setMessage] = React.useState("");
+  const [submitting, setSubmitting] = React.useState(false);
+  const inputRef = React.useRef(null);
+
+  React.useEffect(() => {
+    if (!open) return undefined;
+    inputRef.current?.focus();
+    const onKeyDown = (event) => event.key === "Escape" && onClose();
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [open, onClose]);
+
+  if (!open) return null;
+
+  const submit = async (event) => {
+    event.preventDefault();
+    if (!validEmail(email)) {
+      setMessage("Please check your email address.");
+      return;
+    }
+
+    setMessage("");
+    setSubmitting(true);
+
+    try {
+      if (!supabaseConfigured) throw new Error("Download signup is not configured");
+      const { error } = await supabase.from("guide_signups").insert({
+        email: email.trim().toLowerCase(),
+        guide_id: "cyberdeck-part-1-download",
+        guide_title: "Cyberdeck Workshop Part 1 download",
+      });
+      if (error) throw error;
+      onDownload();
+    } catch (error) {
+      console.error("Cyberdeck download signup failed:", error);
+      setMessage("We could not unlock the download just now. Please try again.");
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  return (
+    <div className="cd-download-modal" role="presentation" onMouseDown={onClose}>
+      <div
+        className="cd-download-dialog"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="download-dialog-title"
+        onMouseDown={(event) => event.stopPropagation()}
+      >
+        <button className="cd-download-close" type="button" onClick={onClose} aria-label="Close download form">×</button>
+        <p className="cd-note-label">CYBERDECK WORKSHOP · PART 1</p>
+        <h2 id="download-dialog-title">GET THE GUIDE.</h2>
+        <p>Enter your email to unlock the Cyberdeck 2.0 workshop download.</p>
+        <form className="cd-signup-form cd-download-form" onSubmit={submit}>
+          <label htmlFor="download-email">Email address</label>
+          <div>
+            <input
+              ref={inputRef}
+              id="download-email"
+              type="email"
+              placeholder="you@email.com"
+              value={email}
+              onChange={(event) => setEmail(event.target.value)}
+              required
+            />
+            <button type="submit" disabled={submitting}>
+              {submitting ? "UNLOCKING…" : "UNLOCK DOWNLOAD"}
+            </button>
+          </div>
+          {message && <p role="alert">{message}</p>}
+        </form>
+      </div>
+    </div>
   );
 }
 
@@ -173,6 +243,8 @@ function PartTwoSignup() {
 }
 
 export default function CyberdeckWorkshop() {
+  const [downloadGateOpen, setDownloadGateOpen] = React.useState(false);
+
   React.useEffect(() => {
     const previousTitle = document.title;
     const description = document.querySelector('meta[name="description"]');
@@ -190,6 +262,12 @@ export default function CyberdeckWorkshop() {
     };
   }, []);
 
+  const beginDownload = () => setDownloadGateOpen(true);
+  const releaseDownload = () => {
+    setDownloadGateOpen(false);
+    window.location.assign(archiveUrl);
+  };
+
   return (
     <div className="cd-page">
       <a className="cd-skip" href="#workshop-main">Skip to the workshop guide</a>
@@ -204,7 +282,6 @@ export default function CyberdeckWorkshop() {
           <a href="#setup">setup</a>
           <a href="#games">games</a>
           <a href="#part-2">part 2</a>
-          <a href="#help">help</a>
           <a className="cd-nav-home" href="/">← community home</a>
         </div>
       </nav>
@@ -218,9 +295,9 @@ export default function CyberdeckWorkshop() {
               LET&apos;S GET BUILDING.
             </p>
             <div className="cd-actions" aria-label="Workshop downloads">
-              <a className="cd-button cd-button--primary" href={archiveUrl}>
+              <button className="cd-button cd-button--primary" type="button" onClick={beginDownload}>
                 DOWNLOAD CYBERDECK 2.0 ↓
-              </a>
+              </button>
               <a className="cd-button cd-button--outline" href={repoUrl} target="_blank" rel="noreferrer">
                 VIEW SOURCE ON GITHUB ↗
               </a>
@@ -462,6 +539,23 @@ sudo shutdown now`}</Code>
           </div>
         </section>
 
+        <section className="cd-next">
+          <p className="cd-kicker">TAKE IT HOME. MAKE IT YOURS.</p>
+          <h2>BUILD YOUR OWN GAMES.<br />CREATIVITY IS YOUR OCEAN.</h2>
+          <p>
+            You flashed an operating system, connected two computers, installed a display,
+            and ran real code on a machine you built. Go home and improve it. Change a game,
+            invent a new one, redesign the case, and share what you discover. This deck is a
+            starting point—not the edge of the map.
+          </p>
+          <div className="cd-actions">
+            <button className="cd-button cd-button--primary" type="button" onClick={beginDownload}>
+              DOWNLOAD CYBERDECK 2.0 ↓
+            </button>
+            <a className="cd-button cd-button--outline" href="#part-2">SIGN UP FOR PART 2 ↑</a>
+          </div>
+        </section>
+
         <section id="part-2" className="cd-part-two">
           <div className="cd-part-two-inner">
             <p className="cd-kicker">CYBERDECK WORKSHOP · PART 2</p>
@@ -474,35 +568,6 @@ sudo shutdown now`}</Code>
             <PartTwoSignup />
           </div>
         </section>
-
-        <section id="help" className="cd-section">
-          <SectionTitle kicker="FAST CHECKS FIRST">STUCK IS PART OF THE BUILD.</SectionTitle>
-          <div className="cd-help-grid">
-            {troubleshooting.map(([problem, fix]) => (
-              <details key={problem} className="cd-help-item">
-                <summary>{problem}<span aria-hidden="true">+</span></summary>
-                <p>{fix}</p>
-              </details>
-            ))}
-          </div>
-        </section>
-
-        <section className="cd-next">
-          <p className="cd-kicker">TAKE IT HOME. MAKE IT YOURS.</p>
-          <h2>BUILD YOUR OWN GAMES.<br />CREATIVITY IS YOUR OCEAN.</h2>
-          <p>
-            You flashed an operating system, connected two computers, installed a display,
-            and ran real code on a machine you built. Go home and improve it. Change a game,
-            invent a new one, redesign the case, and share what you discover. This deck is a
-            starting point—not the edge of the map.
-          </p>
-          <div className="cd-actions">
-            <a className="cd-button cd-button--primary" href={archiveUrl}>
-              DOWNLOAD CYBERDECK 2.0 ↓
-            </a>
-            <a className="cd-button cd-button--outline" href="#part-2">SIGN UP FOR PART 2 ↑</a>
-          </div>
-        </section>
       </main>
 
       <footer className="cd-footer">
@@ -510,6 +575,12 @@ sudo shutdown now`}</Code>
         <p>Hands busy, guard down. Build it together, then make it yours.</p>
         <a href="/">wallflower-project.vercel.app</a>
       </footer>
+
+      <DownloadGate
+        open={downloadGateOpen}
+        onClose={() => setDownloadGateOpen(false)}
+        onDownload={releaseDownload}
+      />
     </div>
   );
 }
