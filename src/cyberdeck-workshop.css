@@ -424,10 +424,14 @@ body {
 
 .cd-setup-list > li {
   display: grid;
-  grid-template-columns: 62px 1fr;
+  grid-template-columns: 62px minmax(0, 1fr);
   gap: 24px;
   padding: 35px 0;
   border-top: 2px solid rgba(47, 67, 224, 0.28);
+}
+
+.cd-setup-list > li > div {
+  min-width: 0;
 }
 
 .cd-setup-list > li:last-child {
@@ -462,11 +466,16 @@ body {
 
 .cd-command {
   position: relative;
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
   margin: 13px 0;
 }
 
 .cd-code {
   display: block;
+  width: 100%;
+  max-width: 100%;
   overflow-x: auto;
   min-height: 52px;
   margin: 0;
@@ -518,11 +527,13 @@ body {
 
 .cd-install-checkpoints {
   display: grid;
+  min-width: 0;
   gap: 18px;
   margin-top: 24px;
 }
 
 .cd-install-checkpoints > div {
+  min-width: 0;
   padding: 20px;
   border: 2px solid rgba(47, 67, 224, 0.2);
   border-radius: 14px;
