@@ -13,6 +13,7 @@
   --cd-card-border: rgba(47, 67, 224, 0.24);
   --cd-card-radius: 14px;
   --cd-card-padding: 20px;
+  --cd-section-space: 72px;
   --cd-display: "Anton", Impact, sans-serif;
   --cd-body: "DM Sans", system-ui, sans-serif;
 }
@@ -89,8 +90,8 @@ body {
   justify-content: space-between;
   align-items: center;
   gap: 24px;
-  min-height: 72px;
-  padding: 10px clamp(18px, 4vw, 48px);
+  min-height: 82px;
+  padding: 12px clamp(18px, 4vw, 48px);
   border-bottom: 1px solid rgba(23, 23, 25, 0.08);
   background: rgba(244, 240, 227, 0.96);
   backdrop-filter: blur(12px);
@@ -101,13 +102,13 @@ body {
   align-items: center;
   gap: 10px;
   font-family: var(--cd-display);
-  font-size: 19px;
+  font-size: 21px;
   letter-spacing: 1px;
 }
 
 .cd-brand img {
-  width: 44px;
-  height: 44px;
+  width: 50px;
+  height: 50px;
   object-fit: contain;
 }
 
@@ -122,7 +123,6 @@ body {
 
 .cd-nav-links a:hover,
 .cd-inline-link:hover,
-.cd-make-card a:hover,
 .cd-compat-row a:hover {
   text-decoration: underline;
   text-underline-offset: 4px;
@@ -140,14 +140,13 @@ body {
   display: grid;
   place-items: center;
   width: min(1180px, calc(100% - 48px));
-  min-height: calc(100vh - 72px);
   margin: 0 auto;
-  padding: 72px 0 82px;
+  padding: var(--cd-section-space) 0;
 }
 
 .cd-hero-copy {
   width: 100%;
-  max-width: 820px;
+  max-width: 940px;
   margin: 0 auto;
   text-align: center;
 }
@@ -165,6 +164,7 @@ body {
 
 .cd-hero h1,
 .cd-section-heading h2,
+.cd-part-two h2,
 .cd-next h2 {
   font-family: var(--cd-display);
   font-weight: 400;
@@ -174,7 +174,7 @@ body {
 .cd-hero h1 {
   margin: 0;
   color: var(--cd-blue);
-  font-size: clamp(65px, 8.8vw, 118px);
+  font-size: clamp(72px, 9.4vw, 128px);
   line-height: 0.92;
   letter-spacing: 0.4px;
 }
@@ -190,6 +190,11 @@ body {
   font-weight: 700;
   letter-spacing: 1.2px;
   line-height: 1.65;
+}
+
+.cd-hero .cd-kicker {
+  font-size: 15px;
+  letter-spacing: 2.2px;
 }
 
 .cd-actions {
@@ -244,8 +249,9 @@ body {
 .cd-section,
 .cd-compat,
 .cd-customise,
+.cd-part-two,
 .cd-next {
-  padding: 100px max(24px, calc((100vw - 1180px) / 2));
+  padding: var(--cd-section-space) max(24px, calc((100vw - 1180px) / 2));
 }
 
 .cd-section-heading {
@@ -273,8 +279,7 @@ body {
 .cd-equipment-item h3,
 .cd-compat-row h3,
 .cd-setup-list h3,
-.cd-game-list h3,
-.cd-make-card h3 {
+.cd-games-grid h3 {
   font-family: var(--cd-display);
   font-weight: 400;
   text-transform: uppercase;
@@ -317,9 +322,7 @@ body {
 .cd-equipment-item p,
 .cd-compat-row p,
 .cd-setup-list p,
-.cd-game-list p,
-.cd-make-card p,
-.cd-make-card li {
+.cd-games-grid p {
   margin: 0;
   line-height: 1.65;
 }
@@ -342,27 +345,6 @@ body {
 .cd-check--optional {
   border-style: dashed;
   color: var(--cd-coral-text);
-}
-
-.cd-make-card {
-  padding: 29px;
-  border: 3px solid var(--cd-ink);
-  border-radius: 22px;
-  background: var(--cd-coral);
-  box-shadow: 10px 10px 0 var(--cd-ink);
-}
-
-.cd-make-card h3 {
-  margin: 0 0 13px;
-  font-size: 29px;
-  line-height: 1.1;
-}
-
-.cd-make-card a {
-  display: inline-block;
-  margin-top: 20px;
-  color: var(--cd-blue-dark);
-  font-weight: 700;
 }
 
 .cd-compat {
@@ -625,51 +607,129 @@ body {
   color: var(--cd-cream);
 }
 
-.cd-customise-grid {
-  display: grid;
-  grid-template-columns: 1.15fr 0.85fr;
-  align-items: start;
-  gap: clamp(36px, 6vw, 74px);
-}
-
 .cd-customise-lede {
-  margin: 0 0 28px;
+  max-width: 780px;
+  margin: -18px auto 38px;
   color: rgba(244, 240, 227, 0.85);
   font-size: 19px;
   line-height: 1.7;
+  text-align: center;
 }
 
-.cd-game-list article {
-  padding: 20px 0;
-  border-top: 1px solid rgba(244, 240, 227, 0.35);
+.cd-games-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
 }
 
-.cd-game-list article:last-child {
-  border-bottom: 1px solid rgba(244, 240, 227, 0.35);
+.cd-games-grid article {
+  padding: var(--cd-card-padding);
+  border: 1px solid rgba(244, 240, 227, 0.42);
+  border-radius: var(--cd-card-radius);
+  background: rgba(23, 23, 25, 0.18);
 }
 
-.cd-game-list h3 {
+.cd-games-grid h3 {
   margin: 0 0 6px;
   color: var(--cd-coral-soft);
   font-size: 23px;
 }
 
-.cd-game-list p {
+.cd-games-grid p {
   color: rgba(244, 240, 227, 0.78);
 }
 
-.cd-make-card {
+.cd-part-two {
+  background: var(--cd-coral);
+}
+
+.cd-part-two-inner {
+  max-width: 940px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.cd-part-two h2 {
+  margin: 0;
   color: var(--cd-ink);
+  font-size: clamp(50px, 7vw, 86px);
+  line-height: 0.96;
 }
 
-.cd-make-card ol {
-  padding-left: 21px;
+.cd-part-two-inner > p:not(.cd-kicker) {
+  max-width: 760px;
+  margin: 26px auto 34px;
+  font-size: 18px;
+  line-height: 1.7;
 }
 
-.cd-make-card li {
+.cd-signup-form,
+.cd-signup-success {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 22px;
+  border: 2px solid var(--cd-ink);
+  border-radius: var(--cd-card-radius);
+  background: var(--cd-paper);
+  box-shadow: 8px 8px 0 var(--cd-ink);
+  color: var(--cd-ink);
+  text-align: left;
+}
+
+.cd-signup-form label {
+  display: block;
   margin-bottom: 9px;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
 }
 
+.cd-signup-form > div {
+  display: flex;
+  gap: 10px;
+}
+
+.cd-signup-form input {
+  flex: 1 1 auto;
+  min-width: 0;
+  padding: 14px 16px;
+  border: 2px solid var(--cd-ink);
+  border-radius: 999px;
+  background: white;
+  color: var(--cd-ink);
+  font: inherit;
+}
+
+.cd-signup-form button {
+  flex: 0 0 auto;
+  padding: 13px 20px;
+  border: 2px solid var(--cd-ink);
+  border-radius: 999px;
+  background: var(--cd-blue);
+  color: var(--cd-cream);
+  cursor: pointer;
+  font-family: var(--cd-display);
+  font-size: 16px;
+  letter-spacing: 0.7px;
+}
+
+.cd-signup-form button:disabled {
+  cursor: wait;
+  opacity: 0.65;
+}
+
+.cd-signup-form > p {
+  margin: 10px 0 0;
+  color: var(--cd-coral-text);
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.cd-signup-success {
+  font-weight: 700;
+  text-align: center;
+}
 
 .cd-help-grid {
   display: grid;
@@ -761,17 +821,9 @@ body {
   font-weight: 700;
 }
 
-@media (max-width: 960px) {
+@media (max-width: 1100px) {
   .cd-nav-links a:not(.cd-nav-home) {
     display: none;
-  }
-
-  .cd-hero {
-    min-height: auto;
-  }
-
-  .cd-customise-grid {
-    grid-template-columns: 1fr;
   }
 
   .cd-compat-row {
@@ -786,7 +838,7 @@ body {
 
   .cd-hero {
     width: min(100% - 34px, 1180px);
-    padding-top: 54px;
+    padding: 72px 0;
   }
 
   .cd-hero h1 {
@@ -806,9 +858,10 @@ body {
   .cd-section,
   .cd-compat,
   .cd-customise,
+  .cd-part-two,
   .cd-next {
-    padding-top: 76px;
-    padding-bottom: 76px;
+    padding-top: 72px;
+    padding-bottom: 72px;
   }
 
   .cd-section-heading {
@@ -838,7 +891,8 @@ body {
   }
 
   .cd-help-grid,
-  .cd-os-grid {
+  .cd-os-grid,
+  .cd-games-grid {
     grid-template-columns: 1fr;
   }
 }
@@ -853,8 +907,12 @@ body {
     font-size: 12px;
   }
 
-  .cd-make-card {
-    padding-inline: 20px;
+  .cd-signup-form > div {
+    flex-direction: column;
+  }
+
+  .cd-signup-form button {
+    width: 100%;
   }
 
   .cd-code,

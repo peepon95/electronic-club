@@ -1,5 +1,6 @@
 import React from "react";
 import { siteConfig } from "./config";
+import { supabase, supabaseConfigured } from "./supabase";
 import "./cyberdeck-workshop.css";
 
 const repoUrl = siteConfig.cyberdeckRepository;
@@ -53,13 +54,18 @@ const compatibility = [
   ["Pi Zero W / Zero WH", "Experimental", "The workshop uses the Pi Zero 2 W with header. If you choose a Zero W or Zero WH, you will need to explore and troubleshoot its setup and performance on your own. Animation-heavy games may stutter.", piZeroWhUrl],
 ];
 
-const gameIdeas = [
-  ["Chinese Lingo", "Change the practice set, hints, difficulty or feedback while keeping correct stroke order."],
-  ["Makan Ninja", "Swap the foods, rebalance points or add one new hazard."],
-  ["Flappy Bird", "Adjust speed, gap size, colours or the city backdrop."],
-  ["Paint", "Add a palette colour, brush size or clear-screen confirmation."],
-  ["Journal + e-reader", "Change the typewriter theme or add your own licensed plain-text writing."],
+const includedGames = [
+  ["Chinese Lingo", "An offline, level-based trainer for learning simplified Chinese characters and practising the correct stroke order."],
+  ["Makan Ninja", "A touchscreen action game where you slash Malaysian food with the stylus and avoid the bombs."],
+  ["Tic-Tac-Toe", "A two-player touchscreen version of the classic three-in-a-row grid game."],
+  ["Flappy Bird", "A touch-and-keyboard flying game set against a Kuala Lumpur-inspired pixel skyline."],
+  ["Minesweeper", "A touchscreen version of the classic logic game: uncover safe squares without hitting a mine."],
+  ["Paint", "A simple drawing canvas made for the touchscreen stylus."],
+  ["E-Reader", "A plain-text reader that remembers your progress. Add your own or public-domain .txt books."],
+  ["Journal", "A keyboard-driven typewriter journal that stores your entries locally on the Cyberdeck."],
 ];
+
+const validEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
 const troubleshooting = [
   ["SSH cannot find the hostname", "Check that the Pi and laptop use the same network. If local names fail, find the Pi's IP in the router or hotspot device list and use that address."],
@@ -108,16 +114,74 @@ function SectionTitle({ kicker, children, light = false }) {
   );
 }
 
+function PartTwoSignup() {
+  const [email, setEmail] = React.useState("");
+  const [message, setMessage] = React.useState("");
+  const [submitting, setSubmitting] = React.useState(false);
+  const [joined, setJoined] = React.useState(false);
+
+  const submit = async (event) => {
+    event.preventDefault();
+    if (!validEmail(email)) {
+      setMessage("Please check your email address.");
+      return;
+    }
+
+    setMessage("");
+    setSubmitting(true);
+
+    try {
+      if (!supabaseConfigured) throw new Error("Signup is not configured");
+      const { error } = await supabase.from("guide_signups").insert({
+        email: email.trim().toLowerCase(),
+        guide_id: "cyberdeck-2",
+        guide_title: "Cyberdeck Workshop Part 2",
+      });
+      if (error) throw error;
+      setJoined(true);
+    } catch (error) {
+      console.error("Part 2 signup failed:", error);
+      setMessage("We could not save your spot just now. Please try again.");
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  if (joined) {
+    return <div className="cd-signup-success">You&apos;re on the Part 2 list. We&apos;ll email you when registration opens.</div>;
+  }
+
+  return (
+    <form className="cd-signup-form" onSubmit={submit}>
+      <label htmlFor="part-two-email">Email address</label>
+      <div>
+        <input
+          id="part-two-email"
+          type="email"
+          placeholder="you@email.com"
+          value={email}
+          onChange={(event) => setEmail(event.target.value)}
+          required
+        />
+        <button type="submit" disabled={submitting}>
+          {submitting ? "SAVING…" : "SIGN UP FOR PART 2"}
+        </button>
+      </div>
+      {message && <p role="alert">{message}</p>}
+    </form>
+  );
+}
+
 export default function CyberdeckWorkshop() {
   React.useEffect(() => {
     const previousTitle = document.title;
     const description = document.querySelector('meta[name="description"]');
     const previousDescription = description?.getAttribute("content");
 
-    document.title = "Cyberdeck Workshop Guide — Wallflower Project";
+    document.title = "Cyberdeck Workshop Part 1 — Wallflower Project";
     description?.setAttribute(
       "content",
-      "Build a Raspberry Pi cyberdeck with a step-by-step equipment, hotspot, display and game installation guide.",
+      "Set up a Raspberry Pi Cyberdeck, install two included games, and sign up for Cyberdeck Workshop Part 2.",
     );
 
     return () => {
@@ -138,7 +202,8 @@ export default function CyberdeckWorkshop() {
         <div className="cd-nav-links">
           <a href="#equipment">equipment</a>
           <a href="#setup">setup</a>
-          <a href="#customise">make it yours</a>
+          <a href="#games">games</a>
+          <a href="#part-2">part 2</a>
           <a href="#help">help</a>
           <a className="cd-nav-home" href="/">← community home</a>
         </div>
@@ -147,7 +212,7 @@ export default function CyberdeckWorkshop() {
       <main id="workshop-main">
         <header className="cd-hero">
           <div className="cd-hero-copy">
-            <p className="cd-kicker">CYBERDECK WORKSHOP · PARTICIPANT GUIDE</p>
+            <p className="cd-kicker">CYBERDECK WORKSHOP · PART 1</p>
             <h1>BUILD IT.<br />BOOT IT.<br /><span>MAKE IT YOURS.</span></h1>
             <p className="cd-hero-lede">
               LET&apos;S GET BUILDING.
@@ -330,7 +395,7 @@ cd cyberdeck-workshop
                     <strong>Choose the games for your deck</strong>
                     <Code>{`./install.sh --list
 sudo ./install.sh`}</Code>
-                    <p>Press Enter to install every game, or enter the numbers of the games you want.</p>
+                    <p>Enter the numbers of the two games you picked. You can run the installer again later to add more.</p>
                   </div>
                 </div>
               </div>
@@ -343,8 +408,8 @@ sudo ./install.sh`}</Code>
                 <Code>sudo reboot</Code>
                 <p>
                   Wait two minutes. Confirm that <strong>CYBERDECK 2.0</strong> appears, the stylus
-                  selects an app, and Chinese Lingo and Makan Ninja respond to touch. A wired or
-                  Bluetooth keyboard is optional; set one up later if you want typing and arrow controls.
+                  selects an app, and both games you chose open and respond to their controls. A wired
+                  or Bluetooth keyboard is optional; set one up later if you want typing and arrow controls.
                 </p>
               </div>
             </li>
@@ -368,35 +433,32 @@ sudo shutdown now`}</Code>
           </ol>
         </section>
 
-        <section id="customise" className="cd-customise">
-          <SectionTitle kicker="AFTER THE DECK WORKS" light>PLAY FIRST. PICK ONE. CHANGE ONE THING.</SectionTitle>
-          <div className="cd-customise-grid">
-            <div>
-              <p className="cd-customise-lede">
-                Try the examples, choose the one that makes you curious, and make one small change.
-                Take the reusable loop home: read → change → test → keep or restore.
-              </p>
-              <div className="cd-game-list">
-                {gameIdeas.map(([name, idea]) => (
-                  <article key={name}>
-                    <h3>{name}</h3>
-                    <p>{idea}</p>
-                  </article>
-                ))}
-              </div>
-            </div>
-            <aside className="cd-make-card">
-              <p className="cd-note-label">THE CREATIVE LOOP</p>
-              <h3>Small experiments become your own game.</h3>
-              <ol>
-                <li>Play the working version.</li>
-                <li>Choose one rule, colour, character or sound.</li>
-                <li>Change only that one thing.</li>
-                <li>Run the checks and test it on the Cyberdeck.</li>
-                <li>Keep what works. Restore and try again when it does not.</li>
-              </ol>
-              <a href={repoUrl} target="_blank" rel="noreferrer">Browse the workshop code ↗</a>
-            </aside>
+        <section id="games" className="cd-customise">
+          <SectionTitle kicker="GAMES INCLUDED IN THE PACK" light>PICK TWO GAMES YOU LIKE.</SectionTitle>
+          <p className="cd-customise-lede">
+            Cyberdeck 2.0 includes eight ready-to-play apps. Choose any two during Part 1.
+            You can run the installer again and add the others whenever you are ready.
+          </p>
+          <div className="cd-games-grid">
+            {includedGames.map(([name, description]) => (
+              <article key={name}>
+                <h3>{name}</h3>
+                <p>{description}</p>
+              </article>
+            ))}
+          </div>
+        </section>
+
+        <section id="part-2" className="cd-part-two">
+          <div className="cd-part-two-inner">
+            <p className="cd-kicker">CYBERDECK WORKSHOP · PART 2</p>
+            <h2>CREATE YOUR OWN GAME.</h2>
+            <p>
+              Part 1 gets your Cyberdeck set up and running. In Part 2, bring it back and
+              turn your own idea into a playable game—plan the rules, build it, test it on
+              the touchscreen, and take the code home to keep improving.
+            </p>
+            <PartTwoSignup />
           </div>
         </section>
 
@@ -425,7 +487,7 @@ sudo shutdown now`}</Code>
             <a className="cd-button cd-button--primary" href={archiveUrl}>
               DOWNLOAD CYBERDECK 2.0 ↓
             </a>
-            <a className="cd-button cd-button--outline" href="/">BACK TO WALLFLOWER PROJECT</a>
+            <a className="cd-button cd-button--outline" href="#part-2">SIGN UP FOR PART 2 ↑</a>
           </div>
         </section>
       </main>

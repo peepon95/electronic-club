@@ -22,8 +22,8 @@ npm run preview    # preview the production build locally
 ## Cyberdeck workshop page
 
 The participant-facing guide lives at `/cyberdeck-workshop`. It covers the
-equipment, a seven-step setup, Raspberry Pi compatibility, game customisation,
-troubleshooting, and safe shutdown. The homepage
+equipment, a seven-step Part 1 setup, Raspberry Pi compatibility, choosing two
+included games, Workshop Part 2 signup, troubleshooting, and safe shutdown. The homepage
 links to it from both the navigation and the Cyberdeck Part 1 card.
 
 `VITE_CYBERDECK_REPOSITORY_URL` controls the page's source and workshop download
