@@ -23,21 +23,17 @@ npm run preview    # preview the production build locally
 
 The participant-facing guide lives at `/cyberdeck-workshop`. It covers the
 known-good equipment, session flow, setup checkpoints, Raspberry Pi compatibility,
-game customisation with Codex, troubleshooting, and safe shutdown. The homepage
+game customisation, troubleshooting, and safe shutdown. The homepage
 links to it from both the navigation and the Cyberdeck Part 1 card.
 
-`VITE_CYBERDECK_REPOSITORY_URL` controls the page's source and latest Release
-buttons. Keep the download button pointed at a tested GitHub Release rather than
-the moving `main` branch.
+`VITE_CYBERDECK_REPOSITORY_URL` controls the page's source and workshop download
+buttons. The participant button points directly to `cyberdeck-workshop.zip` in
+the latest GitHub Release rather than the moving `main` branch.
 
-The current page labels `v0.1.0-test` as an independent-testing build. Update
-that wording when a fresh-card test is complete and the first workshop-ready
-release is published.
-
-The installation section mirrors the release README: download the ZIP and
-checksum, verify it, run the software checks, install all or selected apps, and
-reboot. Prepare future changes in a branch and Vercel preview; merge and promote
-them only after the site owner approves the preview.
+The installation section mirrors the release README: download the ZIP, optionally
+verify its checksum, run the software checks, choose apps, install and reboot.
+Prepare future changes in a branch and Vercel preview; merge and promote them only
+after the site owner approves the preview.
 
 ## Deploy
 
