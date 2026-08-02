@@ -1,117 +1,259 @@
 import React from "react";
 import { siteConfig } from "./config";
+import { supabase, supabaseConfigured } from "./supabase";
 import "./cyberdeck-workshop.css";
 
 const repoUrl = siteConfig.cyberdeckRepository;
 const releaseUrl = `${repoUrl}/releases/latest`;
-
-const sessionSteps = [
-  ["01", "0:15–1:00", "Flash", "Put the tested Raspberry Pi OS image on the microSD card and save your Wi-Fi and SSH settings."],
-  ["02", "1:00–1:30", "Connect", "Boot the Pi, connect from your laptop over SSH, and confirm the board is reachable."],
-  ["03", "1:30–2:00", "Light the screen", "Enable SPI, install the display driver, and verify that the console appears on the touchscreen."],
-  ["04", "2:10–2:50", "Load the deck", "Install the workshop release, launch the menu, and confirm touch and keyboard controls."],
-  ["05", "2:50–3:20", "Choose a game", "Try the included games, then pick one small idea you want to understand and change."],
-  ["06", "3:20–4:00", "Make it yours", "Use Codex to change one feature at a time, test on the deck, and keep the version that works."],
-];
+const archiveUrl = `${releaseUrl}/download/cyberdeck-workshop.zip`;
+const piZero2Url = "https://my.cytron.io/p-raspberry-pi-zero-2-w-with-header";
+const piZeroWhUrl = "https://my.cytron.io/p-raspberry-pi-zero-wh-with-header";
+const screenUrl = "https://my.cytron.io/p-3.5-inch-tft-touch-screen-for-rpi-3b-3b-plus-4b";
 
 const equipment = [
   {
     name: "Raspberry Pi Zero 2 W with header",
-    note: "The fully supported workshop board. The pre-soldered 40-pin header avoids soldering and accepts the GPIO display.",
-    required: true,
+    note: "The fully supported workshop board. Its pre-soldered header accepts the GPIO screen.",
+    price: "RM89",
+    link: piZero2Url,
   },
   {
     name: "3.5-inch GPIO touchscreen + stylus",
-    note: "The tested setup is 480×320, uses XPT2046/ADS7846 touch input, and plugs onto GPIO pins 1–26.",
-    required: true,
+    note: "The linked 480×320 resistive screen includes the small pen and plugs onto the Pi.",
+    price: "RM65",
+    link: screenUrl,
   },
   {
-    name: "16GB+ microSD card + reader",
+    name: "16GB microSD card + reader",
     note: "The card becomes the Pi's storage. Bring a reader that works with your laptop.",
-    required: true,
   },
   {
-    name: "Stable 5V/2A micro-USB power",
-    note: "Use a suitable power bank or plug and a known-good cable.",
-    required: true,
+    name: "Micro-USB power wire",
+    note: "Use a reliable wire with a suitable 5V/2A power bank or wall plug.",
   },
   {
     name: "Mac or Windows laptop",
     note: "Needed for Raspberry Pi Imager and the terminal or PowerShell steps.",
-    required: true,
+    price: "bring your own",
   },
   {
-    name: "Wired USB keyboard + micro-USB OTG data adapter",
-    note: "The reliable workshop default. Bluetooth is an optional extension after the core deck works.",
-    required: true,
+    name: "Wired or Bluetooth keyboard",
+    note: "Optional for the first workshop. We can explore direct keyboard setup in a later session.",
+    price: "optional",
+    optional: true,
   },
   {
-    name: "2.4GHz Wi-Fi or phone hotspot",
-    note: "The Pi Zero 2 W needs a network for SSH and the initial download. Keep the release ZIP on USB as a fallback.",
-    required: true,
+    name: "Phone hotspot with 2.4GHz support",
+    note: "Use your own hotspot so the same connection can travel home with you. Connect the laptop to it too.",
+    price: "bring your own",
   },
 ];
 
 const compatibility = [
-  ["Pi Zero 2 W with header", "Fully supported", "Matches the tested size, GPIO header, power arrangement and workshop instructions."],
-  ["Pi Zero W / Zero WH", "Experimental", "Similar form factor and GPIO, but slower. Animation-heavy games may stutter."],
-  ["Pi 3B+ / Pi 4B", "Adaptable", "The app logic is reusable, but power, ports, case, framebuffer, overlay and touch input must be rechecked."],
-  ["Pi 5", "Separate porting track", "Do not treat the current image as plug-and-play until the newer display and boot environment is tested end to end."],
-  ["Pico / Arduino / ESP32", "Not compatible", "These microcontrollers do not provide the same Linux, framebuffer, filesystem or input stack."],
+  ["Pi Zero 2 W with header", "Fully supported", "The board used in the workshop. It matches the tested size, GPIO header, power arrangement and every instruction.", piZero2Url],
+  ["Pi Zero W / Zero WH", "Experimental", "The workshop uses the Pi Zero 2 W with header. If you choose a Zero W or Zero WH, you will need to explore and troubleshoot its setup and performance on your own. Animation-heavy games may stutter.", piZeroWhUrl],
 ];
 
-const gameIdeas = [
-  ["Chinese Lingo", "Change the practice set, hints, difficulty or feedback while keeping correct stroke order."],
-  ["Makan Ninja", "Swap the foods, rebalance points or add one new hazard."],
-  ["Flappy Bird", "Adjust speed, gap size, colours or the city backdrop."],
-  ["Paint", "Add a palette colour, brush size or clear-screen confirmation."],
-  ["Journal + e-reader", "Change the typewriter theme or add your own licensed plain-text writing."],
+const includedGames = [
+  ["Chinese Lingo", "An offline, level-based trainer for learning simplified Chinese characters and practising the correct stroke order."],
+  ["Makan Ninja", "A touchscreen action game where you slash Malaysian food with the stylus and avoid the bombs."],
+  ["Tic-Tac-Toe", "A two-player touchscreen version of the classic three-in-a-row grid game."],
+  ["Flappy Bird", "A touch-and-keyboard flying game set against a Kuala Lumpur-inspired pixel skyline."],
+  ["Minesweeper", "A touchscreen version of the classic logic game: uncover safe squares without hitting a mine."],
+  ["Paint", "A simple drawing canvas made for the touchscreen stylus."],
+  ["E-Reader", "A plain-text reader that remembers your progress. Add your own or public-domain .txt books."],
+  ["Journal", "A keyboard-driven typewriter journal that stores your entries locally on the Cyberdeck."],
 ];
 
-const prompts = [
-  "Explain this game's main loop to me like I am new to Python. Do not change anything yet.",
-  "Change only the background colour of this game. Show me which file and line changed.",
-  "Make Makan Ninja award 20 points for durian. Keep every other rule the same.",
-  "Make Flappy Bird slightly easier for beginners, then tell me how to test the change.",
-  "Use the blank game template to make a simple memory game for a 480×320 touchscreen.",
-  "The app stopped launching. Read the error, find the smallest fix, and keep a backup of the working version.",
-];
+const validEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
-const troubleshooting = [
-  ["SSH cannot find the hostname", "Check that the Pi and laptop use the same network. If local names fail, find the Pi's IP in the router or hotspot device list and use that address."],
-  ["Host key changed after reflashing", "Remove only the saved key for that hostname with ssh-keygen -R yourhostname.local, then reconnect and verify the new key."],
-  ["Screen stays white", "Recheck the SPI setting and every character in the display overlay line. Confirm you edited /boot/firmware/config.txt on the tested OS."],
-  ["Touches land in the wrong place", "The screen needs calibration. Run the workshop calibration helper for that exact screen and rotation."],
-  ["Keyboard is missing", "Use the Pi's data port, not its power-only port. Check the OTG adapter and replace any charge-only cable."],
-  ["Arrows or typing do nothing", "Plug the keyboard in before launching the menu, then restart the app. Input devices are detected when the app starts."],
-  ["A game is slow", "Keep graphics and per-frame work simple. Test each change on the Pi, not only on the laptop."],
-];
+function Code({ children, label }) {
+  const [copied, setCopied] = React.useState(false);
+  const command = React.Children.toArray(children).join("");
+  const isBlock = command.includes("\n");
+  const copyLabel = label || (isBlock ? "Copy command block" : "Copy command");
 
-function Code({ children }) {
-  return <code className="cd-code">{children}</code>;
+  const copy = async () => {
+    try {
+      await navigator.clipboard.writeText(command);
+      setCopied(true);
+      window.setTimeout(() => setCopied(false), 1800);
+    } catch {
+      setCopied(false);
+    }
+  };
+
+  return (
+    <div className={`cd-command${isBlock ? " cd-command--block" : ""}`}>
+      <code className="cd-code">{command}</code>
+      <button type="button" onClick={copy} aria-label={`${copyLabel}: ${command}`}>
+        {copied ? "COPIED ✓" : isBlock ? "COPY BLOCK" : "COPY"}
+      </button>
+      <span className="cd-sr-only" role="status" aria-live="polite">
+        {copied ? "Command copied to clipboard." : ""}
+      </span>
+    </div>
+  );
 }
 
-function SectionTitle({ kicker, children, light = false }) {
+function SectionTitle({ kicker, children }) {
   return (
-    <header className={`cd-section-heading${light ? " cd-section-heading--light" : ""}`}>
+    <header className="cd-section-heading">
       <p>{kicker}</p>
       <h2>{children}</h2>
     </header>
   );
 }
 
+function DownloadGate({ open, onClose, onDownload }) {
+  const [email, setEmail] = React.useState("");
+  const [message, setMessage] = React.useState("");
+  const [submitting, setSubmitting] = React.useState(false);
+  const inputRef = React.useRef(null);
+
+  React.useEffect(() => {
+    if (!open) return undefined;
+    inputRef.current?.focus();
+    const onKeyDown = (event) => event.key === "Escape" && onClose();
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [open, onClose]);
+
+  if (!open) return null;
+
+  const submit = async (event) => {
+    event.preventDefault();
+    if (!validEmail(email)) {
+      setMessage("Please check your email address.");
+      return;
+    }
+
+    setMessage("");
+    setSubmitting(true);
+
+    try {
+      if (!supabaseConfigured) throw new Error("Download signup is not configured");
+      const { error } = await supabase.from("guide_signups").insert({
+        email: email.trim().toLowerCase(),
+        guide_id: "cyberdeck-part-1-download",
+        guide_title: "Cyberdeck Workshop Part 1 download",
+      });
+      if (error) throw error;
+      onDownload();
+    } catch (error) {
+      console.error("Cyberdeck download signup failed:", error);
+      setMessage("We could not unlock the download just now. Please try again.");
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  return (
+    <div className="cd-download-modal" role="presentation" onMouseDown={onClose}>
+      <div
+        className="cd-download-dialog"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="download-dialog-title"
+        onMouseDown={(event) => event.stopPropagation()}
+      >
+        <button className="cd-download-close" type="button" onClick={onClose} aria-label="Close download form">×</button>
+        <p className="cd-note-label">CYBERDECK WORKSHOP · PART 1</p>
+        <h2 id="download-dialog-title">GET THE GUIDE.</h2>
+        <p>Enter your email to unlock the Cyberdeck 2.0 workshop download.</p>
+        <form className="cd-signup-form cd-download-form" onSubmit={submit}>
+          <label htmlFor="download-email">Email address</label>
+          <div>
+            <input
+              ref={inputRef}
+              id="download-email"
+              type="email"
+              placeholder="you@email.com"
+              value={email}
+              onChange={(event) => setEmail(event.target.value)}
+              required
+            />
+            <button type="submit" disabled={submitting}>
+              {submitting ? "UNLOCKING…" : "UNLOCK DOWNLOAD"}
+            </button>
+          </div>
+          {message && <p role="alert">{message}</p>}
+        </form>
+      </div>
+    </div>
+  );
+}
+
+function PartTwoSignup() {
+  const [email, setEmail] = React.useState("");
+  const [message, setMessage] = React.useState("");
+  const [submitting, setSubmitting] = React.useState(false);
+  const [joined, setJoined] = React.useState(false);
+
+  const submit = async (event) => {
+    event.preventDefault();
+    if (!validEmail(email)) {
+      setMessage("Please check your email address.");
+      return;
+    }
+
+    setMessage("");
+    setSubmitting(true);
+
+    try {
+      if (!supabaseConfigured) throw new Error("Signup is not configured");
+      const { error } = await supabase.from("guide_signups").insert({
+        email: email.trim().toLowerCase(),
+        guide_id: "cyberdeck-2",
+        guide_title: "Cyberdeck Workshop Part 2",
+      });
+      if (error) throw error;
+      setJoined(true);
+    } catch (error) {
+      console.error("Part 2 signup failed:", error);
+      setMessage("We could not save your spot just now. Please try again.");
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  if (joined) {
+    return <div className="cd-signup-success">You&apos;re on the Part 2 list. We&apos;ll email you when registration opens.</div>;
+  }
+
+  return (
+    <form className="cd-signup-form" onSubmit={submit}>
+      <label htmlFor="part-two-email">Email address</label>
+      <div>
+        <input
+          id="part-two-email"
+          type="email"
+          placeholder="you@email.com"
+          value={email}
+          onChange={(event) => setEmail(event.target.value)}
+          required
+        />
+        <button type="submit" disabled={submitting}>
+          {submitting ? "SAVING…" : "SIGN UP FOR PART 2"}
+        </button>
+      </div>
+      {message && <p role="alert">{message}</p>}
+    </form>
+  );
+}
+
 export default function CyberdeckWorkshop() {
-  const [copiedPrompt, setCopiedPrompt] = React.useState("");
+  const [downloadGateOpen, setDownloadGateOpen] = React.useState(false);
 
   React.useEffect(() => {
     const previousTitle = document.title;
     const description = document.querySelector('meta[name="description"]');
     const previousDescription = description?.getAttribute("content");
 
-    document.title = "Cyberdeck Workshop Guide — Wallflower Project";
+    document.title = "Cyberdeck Workshop Part 1 — Wallflower Project";
     description?.setAttribute(
       "content",
-      "Build a Raspberry Pi cyberdeck, install the workshop games, and use Codex to customise your own project.",
+      "Set up a Raspberry Pi Cyberdeck, install two included games, and sign up for Cyberdeck Workshop Part 2.",
     );
 
     return () => {
@@ -120,14 +262,10 @@ export default function CyberdeckWorkshop() {
     };
   }, []);
 
-  const copyPrompt = async (prompt) => {
-    try {
-      await navigator.clipboard.writeText(prompt);
-      setCopiedPrompt(prompt);
-      window.setTimeout(() => setCopiedPrompt(""), 1800);
-    } catch {
-      setCopiedPrompt("");
-    }
+  const beginDownload = () => setDownloadGateOpen(true);
+  const releaseDownload = () => {
+    setDownloadGateOpen(false);
+    window.location.assign(archiveUrl);
   };
 
   return (
@@ -142,8 +280,8 @@ export default function CyberdeckWorkshop() {
         <div className="cd-nav-links">
           <a href="#equipment">equipment</a>
           <a href="#setup">setup</a>
-          <a href="#customise">customise</a>
-          <a href="#help">help</a>
+          <a href="#games">games</a>
+          <a href="#part-2">part 2</a>
           <a className="cd-nav-home" href="/">← community home</a>
         </div>
       </nav>
@@ -151,106 +289,75 @@ export default function CyberdeckWorkshop() {
       <main id="workshop-main">
         <header className="cd-hero">
           <div className="cd-hero-copy">
-            <p className="cd-kicker">CYBERDECK WORKSHOP · PARTICIPANT GUIDE</p>
+            <p className="cd-kicker">CYBERDECK WORKSHOP · PART 1</p>
             <h1>BUILD IT.<br />BOOT IT.<br /><span>MAKE IT YOURS.</span></h1>
             <p className="cd-hero-lede">
-              Build a pocket-sized Raspberry Pi console, choose an included game,
-              then use Codex to understand the code and turn one small idea into your own.
-              No engineering experience required.
+              LET&apos;S GET BUILDING.
             </p>
             <div className="cd-actions" aria-label="Workshop downloads">
-              <a className="cd-button cd-button--primary" href={releaseUrl} target="_blank" rel="noreferrer">
-                DOWNLOAD v0.1.0 TEST RELEASE ↗
-              </a>
+              <button className="cd-button cd-button--primary" type="button" onClick={beginDownload}>
+                DOWNLOAD CYBERDECK 2.0 ↓
+              </button>
               <a className="cd-button cd-button--outline" href={repoUrl} target="_blank" rel="noreferrer">
                 VIEW SOURCE ON GITHUB ↗
               </a>
             </div>
-            <p className="cd-release-note">
-              v0.1.0-test is for independent friend testing, not the final public-workshop
-              release. The repository is for reading, learning and making your own copy.
-            </p>
           </div>
-          <aside className="cd-hero-card" aria-label="Known-good workshop build">
-            <span className="cd-sticker">KNOWN-GOOD BUILD</span>
-            <dl>
-              <div><dt>Board</dt><dd>Pi Zero 2 W with header</dd></div>
-              <div><dt>Screen</dt><dd>3.5″ · 480×320 · GPIO</dd></div>
-              <div><dt>Touch</dt><dd>XPT2046 / ADS7846 + stylus</dd></div>
-              <div><dt>Controls</dt><dd>Touch + wired keyboard</dd></div>
-              <div><dt>Core</dt><dd>Python on Raspberry Pi OS</dd></div>
-            </dl>
-            <p>Other Raspberry Pis may work, but they are adaptations—not the identical workshop build.</p>
-          </aside>
         </header>
 
-        <section className="cd-session" aria-labelledby="session-title">
-          <SectionTitle kicker="YOUR HALF-DAY ROUTE" light>
-            <span id="session-title">ONE WORKING DECK. ONE GAME YOU MAKE YOURS.</span>
-          </SectionTitle>
-          <div className="cd-session-grid">
-            {sessionSteps.map(([number, time, title, text]) => (
-              <article key={number} className="cd-session-card">
-                <div className="cd-session-meta"><span>{number}</span><time>{time}</time></div>
-                <h3>{title}</h3>
-                <p>{text}</p>
-              </article>
-            ))}
+        <section className="cd-community-note" aria-labelledby="community-note-title">
+          <div>
+            <p className="cd-note-label">A NOTE BEFORE WE BEGIN</p>
+            <h2 id="community-note-title">WE&apos;RE LEARNING AND BUILDING TOGETHER.</h2>
+            <p>
+              We are not professional engineers or teachers. This guide and workshop grew
+              from my own experience building this Cyberdeck, getting stuck, and learning as
+              I went. We are here to support one another, solve problems together, and enjoy
+              the process of making something real.
+            </p>
           </div>
-          <p className="cd-session-rule">
-            The core win is a deck that boots and plays. Customising comes after that foundation works.
-          </p>
         </section>
 
         <section id="equipment" className="cd-section">
-          <SectionTitle kicker="PACK THIS BEFORE THE DAY">THE TESTED KIT.</SectionTitle>
+          <SectionTitle kicker="PACK THIS BEFORE THE DAY">WHAT YOU NEED.</SectionTitle>
           <div className="cd-equipment-layout">
             <div className="cd-equipment-list">
               {equipment.map((item) => (
                 <article key={item.name} className="cd-equipment-item">
-                  <div className="cd-check" aria-hidden="true">✓</div>
+                  <div className={`cd-check${item.optional ? " cd-check--optional" : ""}`} aria-hidden="true">
+                    {item.optional ? "+" : "✓"}
+                  </div>
                   <div>
-                    <h3>{item.name}</h3>
+                    <div className="cd-equipment-title">
+                      <h3>{item.name}</h3>
+                      {item.price && <span>{item.price}</span>}
+                    </div>
                     <p>{item.note}</p>
+                    {item.link && (
+                      <a className="cd-inline-link" href={item.link} target="_blank" rel="noreferrer">
+                        View and buy from Cytron ↗
+                      </a>
+                    )}
                   </div>
                 </article>
               ))}
             </div>
-            <aside className="cd-note-card">
-              <p className="cd-note-label">WHY THE HEADER VERSION?</p>
-              <h3>Skip soldering. Save workshop time.</h3>
-              <p>
-                The screen plugs onto GPIO pins. A headerless Pi can run the software,
-                but someone must solder a straight 40-pin header first. The pre-soldered
-                version removes tools and risk for beginners.
-              </p>
-              <a href="https://my.cytron.io/p-raspberry-pi-zero-2-w-with-header" target="_blank" rel="noreferrer">
-                See the reference board ↗
-              </a>
-              <hr />
-              <p className="cd-note-label">FACILITATOR SPARES</p>
-              <p>
-                Bring 2–3 boot-tested SD cards, wired keyboards, OTG data adapters,
-                one USB hub, a spare screen and a USB copy of the release ZIP.
-              </p>
-            </aside>
           </div>
         </section>
 
         <section className="cd-compat" aria-labelledby="compat-title">
-          <SectionTitle kicker="CAN I USE ANOTHER PI?" light>
-            <span id="compat-title">THE GAME CODE TRAVELS. THE HARDWARE LAYER NEEDS TESTING.</span>
+          <SectionTitle kicker="CAN I USE ANOTHER PI?">
+            <span id="compat-title">TWO BOARD CHOICES. ONE WORKSHOP STANDARD.</span>
           </SectionTitle>
           <p className="cd-compat-intro">
-            Game rules and drawing code are ordinary Python. The current deck still assumes a
-            480×320 RGB565 display, a Linux framebuffer, Linux input devices, a screen overlay,
-            touch calibration and Raspberry Pi OS paths.
+            In the workshop we will use the Pi Zero 2 W with header. The Zero W and Zero WH
+            are experimental alternatives that participants must explore independently.
           </p>
           <div className="cd-compat-list">
-            {compatibility.map(([board, status, note], index) => (
+            {compatibility.map(([board, status, note, link], index) => (
               <article key={board} className="cd-compat-row">
-                <h3>{board}</h3>
-                <span className={`cd-status cd-status--${index === 0 ? "ready" : index === 4 ? "no" : "test"}`}>
+                <h3><a href={link} target="_blank" rel="noreferrer">{board} ↗</a></h3>
+                <span className={`cd-status cd-status--${index === 0 ? "ready" : "test"}`}>
                   {status}
                 </span>
                 <p>{note}</p>
@@ -260,197 +367,214 @@ export default function CyberdeckWorkshop() {
         </section>
 
         <section id="setup" className="cd-section">
-          <SectionTitle kicker="FOLLOW IN ORDER">SET UP THE FOUNDATION.</SectionTitle>
+          <SectionTitle kicker="FOLLOW 1 THROUGH 7">STEP BY STEP GUIDE.</SectionTitle>
           <ol className="cd-setup-list">
             <li>
               <div className="cd-step-number">1</div>
               <div>
-                <h3>Flash the microSD card</h3>
+                <h3>Start your phone hotspot</h3>
                 <p>
-                  In Raspberry Pi Imager choose <strong>Raspberry Pi Zero 2 W</strong> and the
-                  workshop-tested <strong>Raspberry Pi OS Legacy (Bookworm), 32-bit Lite</strong> image.
-                  Before writing, set a hostname, username, password, 2.4GHz Wi-Fi and enable SSH
-                  with password authentication. Write these details down.
+                  Turn on your hotspot before you flash the card. If your phone offers a band or
+                  compatibility choice, use <strong>2.4GHz</strong>; the Pi Zero 2 W does not use a
+                  5GHz-only network. Give the hotspot a simple name and password, then connect your
+                  laptop to that same hotspot.
                 </p>
-                <a className="cd-inline-link" href="https://www.raspberrypi.com/software/" target="_blank" rel="noreferrer">
-                  Get Raspberry Pi Imager ↗
-                </a>
+                <div className="cd-info-card">
+                  <strong>Is the Pi tied to one local network?</strong>
+                  <p>
+                    No. It remembers Wi-Fi networks. SSH works when the laptop and Pi are on the same
+                    local network, so your own hotspot is convenient at the workshop and at home.
+                    The Pi's IP address may change; try its hostname first or check the hotspot's
+                    connected-device list.
+                  </p>
+                </div>
               </div>
             </li>
             <li>
               <div className="cd-step-number">2</div>
               <div>
-                <h3>Fit the screen, power on and connect</h3>
+                <h3>Flash the microSD card</h3>
                 <p>
-                  With power disconnected, align the display on GPIO pins 1–26. Insert the card,
-                  power the Pi and wait up to two minutes on first boot. From Terminal on Mac or
-                  PowerShell on Windows, connect using the names you chose:
+                  Install Raspberry Pi Imager. Choose <strong>Raspberry Pi Zero 2 W</strong> and the
+                  workshop-tested <strong>Raspberry Pi OS Legacy (Bookworm), 32-bit Lite</strong> image.
+                  In the customisation screen, set a hostname, username and password; enter your
+                  hotspot name and password; choose Malaysia as the WLAN country; and enable SSH
+                  with password authentication. Write those four details down before writing the card.
                 </p>
-                <Code>ssh yourusername@yourhostname.local</Code>
-                <p className="cd-small">Your password will not appear while you type. That is normal.</p>
+                <a className="cd-inline-link" href="https://www.raspberrypi.com/software/" target="_blank" rel="noreferrer">
+                  Download Raspberry Pi Imager for Mac or Windows ↗
+                </a>
+                <div className="cd-os-grid">
+                  <div><strong>Mac</strong><p>Open the Terminal app.</p></div>
+                  <div><strong>Windows</strong><p>Open PowerShell or Windows Terminal.</p></div>
+                </div>
+                <p className="cd-small">The Imager buttons look slightly different, but the Pi settings and every command after SSH are the same.</p>
               </div>
             </li>
             <li>
               <div className="cd-step-number">3</div>
               <div>
-                <h3>Enable the tested display</h3>
+                <h3>Fit the screen, boot and connect</h3>
                 <p>
-                  Follow the facilitator's screen-driver checkpoint. The known-good configuration
-                  enables SPI and uses the <code>waveshare35c</code> overlay with the tested rotation.
-                  Screen drivers vary, so do not substitute a different display guide mid-workshop.
+                  With power disconnected, carefully align the display on GPIO pins 1–26. Insert the
+                  card, power the Pi and wait up to two minutes. In Terminal or PowerShell, use the
+                  hostname and username you created:
                 </p>
-                <Code>sudo raspi-config nonint do_spi 0</Code>
-                <Code>git clone https://github.com/goodtft/LCD-show.git</Code>
-                <Code>chmod -R 755 LCD-show</Code>
-                <Code>cd LCD-show</Code>
-                <Code>sudo nano /boot/firmware/config.txt</Code>
-                <Code>dtparam=spi=on</Code>
-                <Code>dtoverlay=waveshare35c,fps=50,speed=24000000,rotate=90</Code>
-                <Code>sudo reboot</Code>
+                <Code>ssh yourusername@yourhostname.local</Code>
+                <p className="cd-small">
+                  Type <strong>yes</strong> if asked to trust the new host. Your password will not
+                  appear while you type—that is normal. If the hostname fails, find the Pi's IP in
+                  your hotspot device list and use <code>ssh yourusername@192.168.x.x</code>.
+                </p>
+                <div className="cd-info-card">
+                  <strong>Reconnect to your phone hotspot later</strong>
+                  <p>Once connected by SSH, you can save your phone hotspot without reflashing:</p>
+                  <Code>sudo nmcli dev wifi connect "YOUR_HOTSPOT_NAME" password "YOUR_HOTSPOT_PASSWORD"</Code>
+                </div>
               </div>
             </li>
             <li>
               <div className="cd-step-number">4</div>
               <div>
-                <h3>Install the workshop release</h3>
+                <h3>Install the linked Cytron screen driver</h3>
                 <p>
-                  Download the current test Release—not a random copy of the main branch. Open its
-                  release notes, confirm that your Pi, display and OS match, then follow the friend
-                  testing checklist included with the package.
+                  These commands follow the driver method on the linked Cytron product page for this
+                  exact screen. Run them inside the SSH session. The final command restarts the Pi
+                  automatically, so your SSH window will disconnect.
                 </p>
-                <div className="cd-actions cd-actions--left">
-                  <a className="cd-button cd-button--primary" href={releaseUrl} target="_blank" rel="noreferrer">
-                    OPEN THE TEST RELEASE ↗
-                  </a>
-                </div>
+                <Code>{`sudo raspi-config nonint do_spi 0
+cd ~
+git clone --depth 1 https://github.com/goodtft/LCD-show.git
+cd LCD-show
+chmod +x LCD35-show
+sudo ./LCD35-show`}</Code>
                 <div className="cd-warning">
-                  The one-line install command will be added here only after the clean workshop ZIP
-                  passes a fresh-card test. That protects the room from an untested download.
+                  Use this driver only with the linked 3.5-inch Cytron screen. After the reboot,
+                  wait two minutes, reconnect by SSH and confirm that the console appears on the display.
                 </div>
               </div>
             </li>
             <li>
               <div className="cd-step-number">5</div>
               <div>
-                <h3>Launch and pass the checkpoint</h3>
+                <h3>Download and install Cyberdeck 2.0</h3>
                 <p>
-                  Plug the wired keyboard into the Pi's USB data port through the OTG adapter before
-                  launching. Start the menu using the release instructions. Do not customise yet:
-                  first confirm that the menu appears, touch lands correctly and keyboard arrows move.
+                  Participants need <strong>cyberdeck-workshop.zip</strong>. Stay inside SSH and run
+                  each block in order. The <code>-f</code> option stops if GitHub does not return the real file.
                 </p>
+                <div className="cd-install-checkpoints">
+                  <div>
+                    <strong>Install the download tools</strong>
+                    <Code>{`sudo apt update
+sudo apt install -y curl unzip`}</Code>
+                  </div>
+                  <div>
+                    <strong>Download the prepared workshop ZIP</strong>
+                    <Code>{`cd ~
+mkdir -p cyberdeck-download
+cd cyberdeck-download
+curl -fL -o cyberdeck-workshop.zip ${archiveUrl}`}</Code>
+                  </div>
+                  <div>
+                    <strong>Extract and run the package checks</strong>
+                    <Code>{`unzip -o cyberdeck-workshop.zip
+cd cyberdeck-workshop
+./scripts/check.sh`}</Code>
+                  </div>
+                  <div>
+                    <strong>Choose the games for your deck</strong>
+                    <Code>{`./install.sh --list
+sudo ./install.sh`}</Code>
+                    <p>Enter the numbers of the two games you picked. You can run the installer again later to add more.</p>
+                  </div>
+                </div>
+              </div>
+            </li>
+            <li>
+              <div className="cd-step-number">6</div>
+              <div>
+                <h3>Reboot, touch and play</h3>
+                <p>Restart once the installer finishes. Your SSH connection will close again.</p>
+                <Code>sudo reboot</Code>
+                <p>
+                  Wait two minutes. Confirm that <strong>CYBERDECK 2.0</strong> appears, the stylus
+                  selects an app, and both games you chose open and respond to their controls. A wired
+                  or Bluetooth keyboard is optional; set one up later if you want typing and arrow controls.
+                </p>
+              </div>
+            </li>
+            <li>
+              <div className="cd-step-number">7</div>
+              <div>
+                <h3>Shut down before you pull power</h3>
+                <p>
+                  The Pi may still be writing to the microSD card. Pulling power while it runs can
+                  corrupt files. In your SSH terminal, run these commands in order:
+                </p>
+                <Code>{`sync
+sync
+sudo shutdown now`}</Code>
+                <div className="cd-warning">
+                  Wait until the green activity light has completely stopped blinking. Only then
+                  unplug the Micro-USB power wire.
+                </div>
               </div>
             </li>
           </ol>
         </section>
 
-        <section id="customise" className="cd-customise">
-          <SectionTitle kicker="THE SECOND HALF" light>PLAY FIRST. PICK ONE. CHANGE ONE THING.</SectionTitle>
-          <div className="cd-customise-grid">
-            <div>
-              <p className="cd-customise-lede">
-                Everyone installs the same stable collection. Try the examples, choose the one that
-                makes you curious, and make one small change. You are learning the loop you can reuse
-                at home: read → change → test → keep or restore.
-              </p>
-              <div className="cd-game-list">
-                {gameIdeas.map(([name, idea]) => (
-                  <article key={name}>
-                    <h3>{name}</h3>
-                    <p>{idea}</p>
-                  </article>
-                ))}
-              </div>
-            </div>
-            <aside className="cd-codex-card">
-              <p className="cd-note-label">ASK CODEX LIKE A TEAMMATE</p>
-              <h3>Small, specific prompts win.</h3>
-              <p>Tell Codex what to change, what must stay the same, and how you want it tested.</p>
-              <ol>
-                <li>Open the cleaned workshop project in Codex.</li>
-                <li>Ask it to explain the game before changing it.</li>
-                <li>Request one small edit and a test.</li>
-                <li>Run it on the Cyberdeck.</li>
-                <li>If it works, save the version. If not, share the exact error.</li>
-              </ol>
-              <a href={repoUrl} target="_blank" rel="noreferrer">Browse the workshop code ↗</a>
-            </aside>
-          </div>
-
-          <div className="cd-prompts" aria-labelledby="prompt-title">
-            <h3 id="prompt-title">STARTER PROMPTS TO COPY</h3>
-            <div>
-              {prompts.map((prompt) => (
-                <button
-                  key={prompt}
-                  type="button"
-                  className="cd-prompt"
-                  onClick={() => copyPrompt(prompt)}
-                  title="Copy this prompt"
-                  aria-label={`Copy prompt: ${prompt}`}
-                >
-                  <span>{prompt}</span>
-                  <strong>{copiedPrompt === prompt ? "copied" : "copy"}</strong>
-                </button>
-              ))}
-            </div>
-            <span className="cd-sr-only" role="status" aria-live="polite">
-              {copiedPrompt ? "Prompt copied to clipboard." : ""}
-            </span>
-            <p>Tip: clicking a prompt copies it when your browser allows clipboard access.</p>
-          </div>
-        </section>
-
-        <section id="help" className="cd-section">
-          <SectionTitle kicker="FAST CHECKS FIRST">STUCK IS PART OF THE BUILD.</SectionTitle>
-          <div className="cd-help-grid">
-            {troubleshooting.map(([problem, fix]) => (
-              <details key={problem} className="cd-help-item">
-                <summary>{problem}<span aria-hidden="true">+</span></summary>
-                <p>{fix}</p>
-              </details>
+        <section id="games" className="cd-customise">
+          <SectionTitle kicker="GAMES INCLUDED IN THE PACK">PICK TWO GAMES YOU LIKE.</SectionTitle>
+          <p className="cd-customise-lede">
+            Cyberdeck 2.0 includes eight ready-to-play apps. Choose any two during Part 1.
+            You can run the installer again and add the others whenever you are ready.
+          </p>
+          <div className="cd-games-grid">
+            {includedGames.map(([name, description]) => (
+              <article key={name}>
+                <h3>{name}</h3>
+                <p>{description}</p>
+              </article>
             ))}
           </div>
         </section>
 
-        <section className="cd-shutdown" aria-labelledby="shutdown-title">
-          <div>
-            <p className="cd-kicker">THE HABIT THAT SAVES YOUR WORK</p>
-            <h2 id="shutdown-title">SHUT DOWN BEFORE YOU PULL POWER.</h2>
-            <p>
-              The Pi may still be writing to the microSD card. Pulling power while it runs can corrupt
-              files. In your SSH terminal, run these commands and wait for the green activity light to stop.
-            </p>
-          </div>
-          <div className="cd-shutdown-code" aria-label="Safe shutdown commands">
-            <Code>sync</Code>
-            <Code>sync</Code>
-            <Code>sudo shutdown now</Code>
-            <strong>Wait for the green light to stop. Then unplug power.</strong>
+        <section className="cd-next">
+          <p className="cd-kicker">TAKE IT HOME. MAKE IT YOURS.</p>
+          <h2>BUILD YOUR OWN GAMES.<br />CREATIVITY IS YOUR OCEAN.</h2>
+          <p>
+            You flashed an operating system, connected two computers, installed a display,
+            and ran real code on a machine you built. Go home and improve it. Change a game,
+            invent a new one, redesign the case, and share what you discover. This deck is a
+            starting point—not the edge of the map.
+          </p>
+          <div className="cd-actions">
+            <button className="cd-button cd-button--primary" type="button" onClick={beginDownload}>
+              DOWNLOAD CYBERDECK 2.0 ↓
+            </button>
+            <a className="cd-button cd-button--outline" href="#part-2">SIGN UP FOR PART 2 ↑</a>
           </div>
         </section>
 
-        <section className="cd-next">
-          <p className="cd-kicker">TAKE THE WORKFLOW HOME</p>
-          <h2>THE GAMES ARE THE HOOK.<br />THE CONFIDENCE IS THE PRIZE.</h2>
-          <p>
-            You flashed an operating system, connected two computers, installed a display,
-            ran real code and changed software on a machine you built. Fork the project when the
-            repository opens publicly, keep experimenting, and share what you make.
-          </p>
-          <div className="cd-actions">
-            <a className="cd-button cd-button--primary" href={releaseUrl} target="_blank" rel="noreferrer">
-              GET THE TEST RELEASE ↗
-            </a>
-            <a className="cd-button cd-button--outline" href="/">BACK TO WALLFLOWER PROJECT</a>
+        <section id="part-2" className="cd-part-two">
+          <div className="cd-part-two-inner">
+            <p className="cd-kicker">CYBERDECK WORKSHOP · PART 2</p>
+            <h2>CREATE YOUR OWN GAME.</h2>
+            <p>
+              Part 1 gets your Cyberdeck set up and running. In Part 2, bring it back and
+              turn your own idea into a playable game—plan the rules, build it, test it on
+              the touchscreen, and take the code home to keep improving.
+            </p>
+            <PartTwoSignup />
           </div>
         </section>
       </main>
 
-      <footer className="cd-footer">
-        <span>WALLFLOWER PROJECT</span>
-        <p>Hands busy, guard down. Build it together, then make it yours.</p>
-        <a href="/">wallflower-project.vercel.app</a>
-      </footer>
+      <DownloadGate
+        open={downloadGateOpen}
+        onClose={() => setDownloadGateOpen(false)}
+        onDownload={releaseDownload}
+      />
     </div>
   );
 }

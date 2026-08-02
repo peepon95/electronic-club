@@ -269,9 +269,7 @@ function WhatWeMake({ onOpen }) {
             <span style={S.guideLink}>
               {guide.soon
                 ? "more soon, gently →"
-                : guide.pageUrl
-                  ? "open the workshop →"
-                  : "get the guide →"}
+                : "get the guide →"}
             </span>
           </button>
         ))}
