@@ -70,9 +70,11 @@ const troubleshooting = [
   ["A game is slow", "Keep graphics and per-frame work simple. Test each change on the Pi, not only on the laptop."],
 ];
 
-function Code({ children, label = "Copy command" }) {
+function Code({ children, label }) {
   const [copied, setCopied] = React.useState(false);
   const command = React.Children.toArray(children).join("");
+  const isBlock = command.includes("\n");
+  const copyLabel = label || (isBlock ? "Copy command block" : "Copy command");
 
   const copy = async () => {
     try {
@@ -85,10 +87,10 @@ function Code({ children, label = "Copy command" }) {
   };
 
   return (
-    <div className="cd-command">
+    <div className={`cd-command${isBlock ? " cd-command--block" : ""}`}>
       <code className="cd-code">{command}</code>
-      <button type="button" onClick={copy} aria-label={`${label}: ${command}`}>
-        {copied ? "COPIED ✓" : "COPY"}
+      <button type="button" onClick={copy} aria-label={`${copyLabel}: ${command}`}>
+        {copied ? "COPIED ✓" : isBlock ? "COPY BLOCK" : "COPY"}
       </button>
       <span className="cd-sr-only" role="status" aria-live="polite">
         {copied ? "Command copied to clipboard." : ""}
@@ -287,12 +289,12 @@ export default function CyberdeckWorkshop() {
                   exact screen. Run them inside the SSH session. The final command restarts the Pi
                   automatically, so your SSH window will disconnect.
                 </p>
-                <Code>sudo raspi-config nonint do_spi 0</Code>
-                <Code>cd ~</Code>
-                <Code>git clone --depth 1 https://github.com/goodtft/LCD-show.git</Code>
-                <Code>cd LCD-show</Code>
-                <Code>chmod +x LCD35-show</Code>
-                <Code>sudo ./LCD35-show</Code>
+                <Code>{`sudo raspi-config nonint do_spi 0
+cd ~
+git clone --depth 1 https://github.com/goodtft/LCD-show.git
+cd LCD-show
+chmod +x LCD35-show
+sudo ./LCD35-show`}</Code>
                 <div className="cd-warning">
                   Use this driver only with the linked 3.5-inch Cytron screen. After the reboot,
                   wait two minutes, reconnect by SSH and confirm that the console appears on the display.
@@ -310,26 +312,26 @@ export default function CyberdeckWorkshop() {
                 <div className="cd-install-checkpoints">
                   <div>
                     <strong>Install the download tools</strong>
-                    <Code>sudo apt update</Code>
-                    <Code>sudo apt install -y curl unzip</Code>
+                    <Code>{`sudo apt update
+sudo apt install -y curl unzip`}</Code>
                   </div>
                   <div>
                     <strong>Download the prepared workshop ZIP</strong>
-                    <Code>cd ~</Code>
-                    <Code>mkdir -p cyberdeck-download</Code>
-                    <Code>cd cyberdeck-download</Code>
-                    <Code>curl -fL -o cyberdeck-workshop.zip {archiveUrl}</Code>
+                    <Code>{`cd ~
+mkdir -p cyberdeck-download
+cd cyberdeck-download
+curl -fL -o cyberdeck-workshop.zip ${archiveUrl}`}</Code>
                   </div>
                   <div>
                     <strong>Extract and run the package checks</strong>
-                    <Code>unzip -o cyberdeck-workshop.zip</Code>
-                    <Code>cd cyberdeck-workshop</Code>
-                    <Code>./scripts/check.sh</Code>
+                    <Code>{`unzip -o cyberdeck-workshop.zip
+cd cyberdeck-workshop
+./scripts/check.sh`}</Code>
                   </div>
                   <div>
                     <strong>Choose the games for your deck</strong>
-                    <Code>./install.sh --list</Code>
-                    <Code>sudo ./install.sh</Code>
+                    <Code>{`./install.sh --list
+sudo ./install.sh`}</Code>
                     <p>Press Enter to install every game, or enter the numbers of the games you want.</p>
                   </div>
                 </div>
@@ -356,9 +358,9 @@ export default function CyberdeckWorkshop() {
                   The Pi may still be writing to the microSD card. Pulling power while it runs can
                   corrupt files. In your SSH terminal, run these commands in order:
                 </p>
-                <Code>sync</Code>
-                <Code>sync</Code>
-                <Code>sudo shutdown now</Code>
+                <Code>{`sync
+sync
+sudo shutdown now`}</Code>
                 <div className="cd-warning">
                   Wait until the green activity light has completely stopped blinking. Only then
                   unplug the Micro-USB power wire.

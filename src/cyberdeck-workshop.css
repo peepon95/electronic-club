@@ -133,6 +133,8 @@ body {
 
 .cd-hero {
   position: relative;
+  display: grid;
+  place-items: center;
   width: min(1180px, calc(100% - 48px));
   min-height: calc(100vh - 72px);
   margin: 0 auto;
@@ -140,7 +142,10 @@ body {
 }
 
 .cd-hero-copy {
+  width: 100%;
   max-width: 820px;
+  margin: 0 auto;
+  text-align: center;
 }
 
 .cd-kicker,
@@ -176,7 +181,7 @@ body {
 
 .cd-hero-lede {
   max-width: 700px;
-  margin: 30px 0 26px;
+  margin: 30px auto 26px;
   font-size: clamp(17px, 2vw, 20px);
   line-height: 1.65;
 }
@@ -189,7 +194,7 @@ body {
 }
 
 .cd-hero .cd-actions {
-  justify-content: flex-start;
+  justify-content: center;
 }
 
 .cd-button {
@@ -410,6 +415,7 @@ body {
 .cd-status--test { color: var(--cd-coral-soft); }
 
 .cd-setup-list {
+  width: min(100%, 940px);
   max-width: 940px;
   margin: 0 auto;
   padding: 0;
@@ -438,6 +444,7 @@ body {
   color: var(--cd-blue);
   font-family: var(--cd-display);
   font-size: 30px;
+  justify-self: center;
 }
 
 .cd-setup-list h3 {
@@ -493,6 +500,15 @@ body {
 .cd-command > button:hover {
   border-color: var(--cd-coral-soft);
   background: rgba(244, 240, 227, 0.2);
+}
+
+.cd-command--block .cd-code {
+  padding-right: 112px;
+  line-height: 1.75;
+}
+
+.cd-command--block > button {
+  min-width: 88px;
 }
 
 .cd-actions--left {
