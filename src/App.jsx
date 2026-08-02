@@ -287,18 +287,16 @@ function Story() {
           <h2 className="wf-h2" style={{ ...S.h2, color: C.ink }}>WHY<br />“WALLFLOWER”?</h2>
         </div>
         <div style={S.storyCopy}>
-          <p style={S.storyLead}>Because I am one.</p>
+          <p style={S.storyLead}>A space to come together.</p>
           <p style={S.storyP}>
-            I'm an introvert, a little socially awkward, and walking into an event
-            alone genuinely scares me — that standing-by-the-wall feeling of wanting
-            to connect but not knowing how. Building alone at home got lonely the same way.
+            Wallflower Project is for introverts, curious people, and anyone who does
+            not want to build, learn, or try something new alone. We keep the room small
+            so it feels easier to settle in and meet people without having to work the room.
           </p>
           <p style={S.storyP}>
-            So Wallflower Project is the room I wished existed: one where you don't have
-            to be good at mingling, because we give you something to do together instead.
-            You make something with your hands, we quietly pair you with someone to
-            actually talk to, and the awkward part takes care of itself. A club for the
-            people who usually hang back — where hanging back is the whole point.
+            Making something side by side gives everyone a natural place to begin. Your
+            hands stay busy, conversation can grow at its own pace, and there is room for
+            quieter, more intimate connections.
           </p>
         </div>
       </div>
