@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
+import CyberdeckWorkshop from "./CyberdeckWorkshop";
 import { siteConfig } from "./config";
 import { supabase, supabaseConfigured } from "./supabase";
 
@@ -24,6 +25,7 @@ const GUIDES = [
       "Start with the core: the board, the screen, the power, and get the whole thing booting. You leave with a little machine that's already starting to feel like yours.",
     kit: "Raspberry Pi (or similar) · small display · keyboard · power bank · case bits",
     guideUrl: siteConfig.guides.cyberdeckPart1,
+    pageUrl: "/cyberdeck-workshop",
   },
   {
     id: "cyberdeck-2",
@@ -87,6 +89,10 @@ export default function App() {
     }
   };
 
+  if (window.location.pathname.replace(/\/$/, "") === "/cyberdeck-workshop") {
+    return <CyberdeckWorkshop />;
+  }
+
   return (
     <div style={S.page}>
       <StyleTag />
@@ -123,6 +129,7 @@ function Nav() {
       <div className="wf-nav-links" style={S.navLinks}>
         <a href="#how" style={S.navLink}>how it works</a>
         <a href="#make" style={S.navLink}>what we make</a>
+        <a href="/cyberdeck-workshop" style={S.navLink}>workshop guide</a>
         <a href="#story" style={S.navLink}>the story</a>
         <a href="#community" style={S.navLink}>community</a>
         <a href="#faq" style={S.navLink}>FAQ</a>
@@ -243,7 +250,14 @@ function WhatWeMake({ onOpen }) {
               ...S.guideCard,
               ...(guide.soon ? S.guideCardSoon : {}),
             }}
-            onClick={() => !guide.soon && onOpen(guide)}
+            onClick={() => {
+              if (guide.soon) return;
+              if (guide.pageUrl) {
+                window.location.assign(guide.pageUrl);
+                return;
+              }
+              onOpen(guide);
+            }}
             aria-disabled={guide.soon || undefined}
           >
             <div style={S.guideTop}>
@@ -254,7 +268,11 @@ function WhatWeMake({ onOpen }) {
             <h3 style={S.guideTitle}>{guide.title}</h3>
             <p style={S.guideBlurb}>{guide.blurb}</p>
             <span style={S.guideLink}>
-              {guide.soon ? "more soon, gently →" : "get the guide →"}
+              {guide.soon
+                ? "more soon, gently →"
+                : guide.pageUrl
+                  ? "open the workshop →"
+                  : "get the guide →"}
             </span>
           </button>
         ))}
