@@ -289,14 +289,14 @@ function Story() {
         <div style={S.storyCopy}>
           <p style={S.storyLead}>A space to come together.</p>
           <p style={S.storyP}>
-            Wallflower Project is for introverts, curious people, and anyone who does
-            not want to build, learn, or try something new alone. We keep the room small
-            so it feels easier to settle in and meet people without having to work the room.
+            Wallflower Project is for introverts, curious people, and anyone who wants
+            to come together to learn something new.
           </p>
           <p style={S.storyP}>
-            Making something side by side gives everyone a natural place to begin. Your
-            hands stay busy, conversation can grow at its own pace, and there is room for
-            quieter, more intimate connections.
+            You do not have to work the room or figure it out alone. If starting a
+            conversation feels awkward, we will gently match you with someone during the
+            event—someone to build beside and talk to. We keep the group small so connections
+            can feel natural, comfortable, and more personal. If you are shy, we've got you.
           </p>
         </div>
       </div>
