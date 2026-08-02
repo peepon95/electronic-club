@@ -105,9 +105,9 @@ function Code({ children, label }) {
   );
 }
 
-function SectionTitle({ kicker, children, light = false }) {
+function SectionTitle({ kicker, children }) {
   return (
-    <header className={`cd-section-heading${light ? " cd-section-heading--light" : ""}`}>
+    <header className="cd-section-heading">
       <p>{kicker}</p>
       <h2>{children}</h2>
     </header>
@@ -228,6 +228,19 @@ export default function CyberdeckWorkshop() {
           </div>
         </header>
 
+        <section className="cd-community-note" aria-labelledby="community-note-title">
+          <div>
+            <p className="cd-note-label">A NOTE BEFORE WE BEGIN</p>
+            <h2 id="community-note-title">WE&apos;RE LEARNING AND BUILDING TOGETHER.</h2>
+            <p>
+              We are not professional engineers or teachers. This guide and workshop grew
+              from my own experience building this Cyberdeck, getting stuck, and learning as
+              I went. We are here to support one another, solve problems together, and enjoy
+              the process of making something real.
+            </p>
+          </div>
+        </section>
+
         <section id="equipment" className="cd-section">
           <SectionTitle kicker="PACK THIS BEFORE THE DAY">WHAT YOU NEED.</SectionTitle>
           <div className="cd-equipment-layout">
@@ -256,7 +269,7 @@ export default function CyberdeckWorkshop() {
         </section>
 
         <section className="cd-compat" aria-labelledby="compat-title">
-          <SectionTitle kicker="CAN I USE ANOTHER PI?" light>
+          <SectionTitle kicker="CAN I USE ANOTHER PI?">
             <span id="compat-title">TWO BOARD CHOICES. ONE WORKSHOP STANDARD.</span>
           </SectionTitle>
           <p className="cd-compat-intro">
@@ -434,7 +447,7 @@ sudo shutdown now`}</Code>
         </section>
 
         <section id="games" className="cd-customise">
-          <SectionTitle kicker="GAMES INCLUDED IN THE PACK" light>PICK TWO GAMES YOU LIKE.</SectionTitle>
+          <SectionTitle kicker="GAMES INCLUDED IN THE PACK">PICK TWO GAMES YOU LIKE.</SectionTitle>
           <p className="cd-customise-lede">
             Cyberdeck 2.0 includes eight ready-to-play apps. Choose any two during Part 1.
             You can run the installer again and add the others whenever you are ready.
