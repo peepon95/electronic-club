@@ -570,12 +570,6 @@ sudo shutdown now`}</Code>
         </section>
       </main>
 
-      <footer className="cd-footer">
-        <span>WALLFLOWER PROJECT</span>
-        <p>Hands busy, guard down. Build it together, then make it yours.</p>
-        <a href="/">wallflower-project.vercel.app</a>
-      </footer>
-
       <DownloadGate
         open={downloadGateOpen}
         onClose={() => setDownloadGateOpen(false)}

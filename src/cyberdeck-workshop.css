@@ -836,29 +836,6 @@ body {
   margin-top: 24px;
 }
 
-.cd-footer {
-  padding: 52px 24px;
-  background: var(--cd-ink);
-  color: var(--cd-cream);
-  text-align: center;
-}
-
-.cd-footer > span {
-  font-family: var(--cd-display);
-  font-size: 22px;
-  letter-spacing: 1px;
-}
-
-.cd-footer p {
-  margin: 12px 0;
-  color: rgba(244, 240, 227, 0.72);
-}
-
-.cd-footer a {
-  color: var(--cd-coral-soft);
-  font-weight: 700;
-}
-
 @media (max-width: 1100px) {
   .cd-nav-links a:not(.cd-nav-home) {
     display: none;
