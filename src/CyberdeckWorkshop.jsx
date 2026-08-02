@@ -427,9 +427,9 @@ export default function CyberdeckWorkshop() {
                   your hotspot device list and use <code>ssh yourusername@192.168.x.x</code>.
                 </p>
                 <div className="cd-info-card">
-                  <strong>Add another Wi-Fi network later</strong>
-                  <p>Once connected by SSH, you can save a home network without reflashing:</p>
-                  <Code>sudo nmcli dev wifi connect "YOUR_WIFI_NAME" password "YOUR_WIFI_PASSWORD"</Code>
+                  <strong>Reconnect to your phone hotspot later</strong>
+                  <p>Once connected by SSH, you can save your phone hotspot without reflashing:</p>
+                  <Code>sudo nmcli dev wifi connect "YOUR_HOTSPOT_NAME" password "YOUR_HOTSPOT_PASSWORD"</Code>
                 </div>
               </div>
             </li>
