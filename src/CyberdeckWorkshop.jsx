@@ -150,9 +150,7 @@ export default function CyberdeckWorkshop() {
             <p className="cd-kicker">CYBERDECK WORKSHOP · PARTICIPANT GUIDE</p>
             <h1>BUILD IT.<br />BOOT IT.<br /><span>MAKE IT YOURS.</span></h1>
             <p className="cd-hero-lede">
-              Follow one path from a blank microSD card to a pocket-sized Raspberry Pi
-              console. Choose an included game, improve it, and keep building at home.
-              No engineering experience required.
+              LET&apos;S GET BUILDING.
             </p>
             <div className="cd-actions" aria-label="Workshop downloads">
               <a className="cd-button cd-button--primary" href={archiveUrl}>

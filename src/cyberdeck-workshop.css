@@ -9,6 +9,10 @@
   --cd-coral-soft: #f1a18c;
   --cd-coral-text: #9b3828;
   --cd-ink: #171719;
+  --cd-card-bg: var(--cd-paper);
+  --cd-card-border: rgba(47, 67, 224, 0.24);
+  --cd-card-radius: 14px;
+  --cd-card-padding: 20px;
   --cd-display: "Anton", Impact, sans-serif;
   --cd-body: "DM Sans", system-ui, sans-serif;
 }
@@ -183,6 +187,8 @@ body {
   max-width: 700px;
   margin: 30px auto 26px;
   font-size: clamp(17px, 2vw, 20px);
+  font-weight: 700;
+  letter-spacing: 1.2px;
   line-height: 1.65;
 }
 
@@ -534,10 +540,10 @@ body {
 
 .cd-install-checkpoints > div {
   min-width: 0;
-  padding: 20px;
-  border: 2px solid rgba(47, 67, 224, 0.2);
-  border-radius: 14px;
-  background: rgba(255, 255, 255, 0.38);
+  padding: var(--cd-card-padding);
+  border: 2px solid var(--cd-card-border);
+  border-radius: var(--cd-card-radius);
+  background: var(--cd-card-bg);
 }
 
 .cd-install-checkpoints strong {
@@ -564,10 +570,10 @@ body {
 
 .cd-info-card {
   margin-top: 20px;
-  padding: 18px 20px;
-  border: 2px solid rgba(47, 67, 224, 0.24);
-  border-radius: 14px;
-  background: rgba(47, 67, 224, 0.06);
+  padding: var(--cd-card-padding);
+  border: 2px solid var(--cd-card-border);
+  border-radius: var(--cd-card-radius);
+  background: var(--cd-card-bg);
 }
 
 .cd-info-card > strong {
@@ -592,10 +598,10 @@ body {
 }
 
 .cd-os-grid > div {
-  padding: 16px;
-  border: 2px solid rgba(47, 67, 224, 0.2);
-  border-radius: 12px;
-  background: rgba(255, 255, 255, 0.34);
+  padding: var(--cd-card-padding);
+  border: 2px solid var(--cd-card-border);
+  border-radius: var(--cd-card-radius);
+  background: var(--cd-card-bg);
 }
 
 .cd-os-grid strong {
@@ -604,8 +610,10 @@ body {
 
 .cd-warning {
   margin-top: 20px;
-  padding: 17px 19px;
+  padding: var(--cd-card-padding);
+  border: 2px solid rgba(155, 56, 40, 0.3);
   border-left: 5px solid var(--cd-coral-text);
+  border-radius: var(--cd-card-radius);
   background: rgba(232, 115, 85, 0.16);
   font-size: 14px;
   font-weight: 600;
@@ -670,9 +678,9 @@ body {
 }
 
 .cd-help-item {
-  border: 2px solid var(--cd-blue);
-  border-radius: 14px;
-  background: var(--cd-paper);
+  border: 2px solid var(--cd-card-border);
+  border-radius: var(--cd-card-radius);
+  background: var(--cd-card-bg);
 }
 
 .cd-help-item summary {
@@ -847,6 +855,12 @@ body {
 
   .cd-make-card {
     padding-inline: 20px;
+  }
+
+  .cd-code,
+  .cd-command--block .cd-code {
+    padding-top: 48px;
+    padding-right: 16px;
   }
 
   .cd-setup-list > li {
