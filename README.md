@@ -34,6 +34,11 @@ The current page labels `v0.1.0-test` as an independent-testing build. Update
 that wording when a fresh-card test is complete and the first workshop-ready
 release is published.
 
+The installation section mirrors the release README: download the ZIP and
+checksum, verify it, run the software checks, install all or selected apps, and
+reboot. Prepare future changes in a branch and Vercel preview; merge and promote
+them only after the site owner approves the preview.
+
 ## Deploy
 
 It's a static Vite site, so any static host works.

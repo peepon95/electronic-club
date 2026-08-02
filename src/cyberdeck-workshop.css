@@ -232,6 +232,13 @@ body {
   line-height: 1.55;
 }
 
+.cd-release-note a {
+  color: var(--cd-blue);
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
 .cd-hero-card {
   position: relative;
   padding: 37px 30px 28px;
@@ -592,6 +599,41 @@ body {
 .cd-actions--left {
   justify-content: flex-start;
   margin-top: 20px;
+}
+
+.cd-install-checkpoints {
+  display: grid;
+  gap: 18px;
+  margin-top: 24px;
+}
+
+.cd-install-checkpoints > div {
+  padding: 20px;
+  border: 2px solid rgba(47, 67, 224, 0.2);
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.38);
+}
+
+.cd-install-checkpoints strong {
+  display: block;
+  margin-bottom: 12px;
+  color: var(--cd-blue);
+  font-family: var(--cd-display);
+  font-size: 20px;
+  font-weight: 400;
+  letter-spacing: 0.3px;
+  text-transform: uppercase;
+}
+
+.cd-install-checkpoints p {
+  margin-top: 12px;
+  font-size: 14px;
+}
+
+.cd-install-checkpoints p code {
+  padding: 2px 5px;
+  border-radius: 4px;
+  background: rgba(47, 67, 224, 0.1);
 }
 
 .cd-warning {

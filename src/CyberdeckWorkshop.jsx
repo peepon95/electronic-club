@@ -4,6 +4,8 @@ import "./cyberdeck-workshop.css";
 
 const repoUrl = siteConfig.cyberdeckRepository;
 const releaseUrl = `${repoUrl}/releases/latest`;
+const archiveUrl = `${releaseUrl}/download/cyberdeck-workshop.zip`;
+const checksumUrl = `${releaseUrl}/download/SHA256SUMS`;
 
 const sessionSteps = [
   ["01", "0:15–1:00", "Flash", "Put the tested Raspberry Pi OS image on the microSD card and save your Wi-Fi and SSH settings."],
@@ -159,8 +161,8 @@ export default function CyberdeckWorkshop() {
               No engineering experience required.
             </p>
             <div className="cd-actions" aria-label="Workshop downloads">
-              <a className="cd-button cd-button--primary" href={releaseUrl} target="_blank" rel="noreferrer">
-                DOWNLOAD v0.1.0 TEST RELEASE ↗
+              <a className="cd-button cd-button--primary" href={archiveUrl}>
+                DOWNLOAD THE TEST ZIP ↓
               </a>
               <a className="cd-button cd-button--outline" href={repoUrl} target="_blank" rel="noreferrer">
                 VIEW SOURCE ON GITHUB ↗
@@ -168,7 +170,7 @@ export default function CyberdeckWorkshop() {
             </div>
             <p className="cd-release-note">
               v0.1.0-test is for independent friend testing, not the final public-workshop
-              release. The repository is for reading, learning and making your own copy.
+              release. <a href={releaseUrl} target="_blank" rel="noreferrer">Read the release notes ↗</a>
             </p>
           </div>
           <aside className="cd-hero-card" aria-label="Known-good workshop build">
@@ -312,20 +314,57 @@ export default function CyberdeckWorkshop() {
             <li>
               <div className="cd-step-number">4</div>
               <div>
-                <h3>Install the workshop release</h3>
+                <h3>Install Cyberdeck 2.0 yourself</h3>
                 <p>
-                  Download the current test Release—not a random copy of the main branch. Open its
-                  release notes, confirm that your Pi, display and OS match, then follow the friend
-                  testing checklist included with the package.
+                  These commands begin after Raspberry Pi OS, SSH and the touchscreen are working.
+                  The tested account name is <code>ee</code>. Stay in the SSH terminal and complete
+                  each checkpoint in order.
                 </p>
+                <div className="cd-install-checkpoints">
+                  <div>
+                    <strong>1 · Install the download tools</strong>
+                    <Code>sudo apt update</Code>
+                    <Code>sudo apt install -y curl unzip</Code>
+                  </div>
+                  <div>
+                    <strong>2 · Download the ZIP and checksum</strong>
+                    <Code>cd ~</Code>
+                    <Code>mkdir -p cyberdeck-download</Code>
+                    <Code>cd cyberdeck-download</Code>
+                    <Code>curl -L -o cyberdeck-workshop.zip {archiveUrl}</Code>
+                    <Code>curl -L -o SHA256SUMS {checksumUrl}</Code>
+                  </div>
+                  <div>
+                    <strong>3 · Verify the download</strong>
+                    <Code>sha256sum -c SHA256SUMS</Code>
+                    <p>Continue only when it says <code>cyberdeck-workshop.zip: OK</code>.</p>
+                  </div>
+                  <div>
+                    <strong>4 · Extract and run the checks</strong>
+                    <Code>unzip cyberdeck-workshop.zip</Code>
+                    <Code>cd cyberdeck-workshop</Code>
+                    <Code>./scripts/check.sh</Code>
+                  </div>
+                  <div>
+                    <strong>5 · Install all eight apps</strong>
+                    <Code>sudo ./install.sh --all</Code>
+                    <p>
+                      To choose specific apps, run <code>./install.sh --list</code>, then use
+                      <code> sudo ./install.sh --apps chinese-lingo,makan-ninja,paint</code>.
+                    </p>
+                  </div>
+                </div>
                 <div className="cd-actions cd-actions--left">
-                  <a className="cd-button cd-button--primary" href={releaseUrl} target="_blank" rel="noreferrer">
-                    OPEN THE TEST RELEASE ↗
+                  <a className="cd-button cd-button--primary" href={archiveUrl}>
+                    DOWNLOAD ZIP ↓
+                  </a>
+                  <a className="cd-button cd-button--outline" href={releaseUrl} target="_blank" rel="noreferrer">
+                    RELEASE NOTES ↗
                   </a>
                 </div>
                 <div className="cd-warning">
-                  The one-line install command will be added here only after the clean workshop ZIP
-                  passes a fresh-card test. That protects the room from an untested download.
+                  This is the friend-testing release. Record the exact command and terminal message
+                  if anything does not match the guide.
                 </div>
               </div>
             </li>
@@ -438,8 +477,8 @@ export default function CyberdeckWorkshop() {
             repository opens publicly, keep experimenting, and share what you make.
           </p>
           <div className="cd-actions">
-            <a className="cd-button cd-button--primary" href={releaseUrl} target="_blank" rel="noreferrer">
-              GET THE TEST RELEASE ↗
+            <a className="cd-button cd-button--primary" href={archiveUrl}>
+              DOWNLOAD THE TEST ZIP ↓
             </a>
             <a className="cd-button cd-button--outline" href="/">BACK TO WALLFLOWER PROJECT</a>
           </div>
