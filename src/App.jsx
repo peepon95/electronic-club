@@ -227,7 +227,6 @@ function HowItWorks() {
           </article>
         ))}
       </div>
-      <p style={S.sectionAside}>No pressure to be charming. That's the whole idea.</p>
     </section>
   );
 }
@@ -302,16 +301,6 @@ function Story() {
             You make something with your hands, we quietly pair you with someone to
             actually talk to, and the awkward part takes care of itself. A club for the
             people who usually hang back — where hanging back is the whole point.
-          </p>
-          <div style={S.storyRule}>“No pressure to be charming. That's the whole idea.”</div>
-          <p style={S.storyP}>
-            We're all social creatures, even the ones of us hiding by the wall. Wanting
-            connection isn't needy — it's human. Most of us just never got handed an
-            easy way to do it as adults, somewhere between the exhaustion of work and
-            the loneliness of scrolling.
-          </p>
-          <p style={{ ...S.storyP, marginBottom: 0 }}>
-            This is that easy way: something to make, someone to meet, no performance required.
           </p>
         </div>
       </div>
@@ -468,7 +457,6 @@ function FinalCTA({ joined, setJoined }) {
           </form>
         )}
         {errorMessage && <div style={S.errorText}>{errorMessage}</div>}
-        <div style={S.finalAccent}>come stand by the wall with us.</div>
       </div>
     </section>
   );
@@ -738,7 +726,6 @@ const S = {
   sectionLabel: { fontWeight: 700, letterSpacing: 2, textTransform: "uppercase", fontSize: 12, marginBottom: 12 },
   h2: { fontFamily: "var(--display)", fontSize: 66, lineHeight: .96, letterSpacing: .8, margin: 0, textTransform: "uppercase" },
   sectionLede: { ...wrap, textAlign: "center", fontSize: 18, lineHeight: 1.65, maxWidth: 720, marginBottom: 52 },
-  sectionAside: { textAlign: "center", fontWeight: 700, color: C.coralText, margin: "28px auto 0", fontSize: 16 },
 
   steps: { ...wrap, display: "grid", gridTemplateColumns: "repeat(3, 1fr)", border: `2px solid ${C.blue}`, borderRadius: 20, overflow: "hidden" },
   step: { padding: "30px", borderRight: `2px solid ${C.blue}`, background: "#F8F5EA" },
@@ -763,7 +750,6 @@ const S = {
   storyCopy: { color: C.ink },
   storyLead: { fontFamily: "var(--display)", fontSize: 38, margin: "0 0 16px", textTransform: "uppercase" },
   storyP: { fontSize: 19, lineHeight: 1.72, margin: "0 0 24px" },
-  storyRule: { border: `3px solid ${C.ink}`, borderRadius: 18, padding: "24px 26px", fontFamily: "var(--display)", fontSize: 30, lineHeight: 1.2, margin: "34px 0", background: C.cream, transform: "rotate(-1deg)" },
 
   communityGrid: { ...wrap, display: "grid", gridTemplateColumns: "1fr 1fr", gap: 58, alignItems: "start" },
   communityP: { fontSize: 19, lineHeight: 1.7, margin: "0 0 22px", color: C.ink },
@@ -791,7 +777,6 @@ const S = {
   joinSubmit: { background: C.coral, color: C.ink, border: `2px solid ${C.ink}`, padding: "15px 29px", borderRadius: 999, fontFamily: "var(--display)", fontSize: 17, letterSpacing: 1 },
   successBox: { border: `2px solid ${C.blue}`, borderRadius: 18, padding: "18px 24px", fontWeight: 700, maxWidth: 520, margin: "0 auto 22px", color: C.blue },
   errorText: { fontWeight: 700, marginTop: 12, fontSize: 15, color: C.blue },
-  finalAccent: { color: C.coralText, fontFamily: "var(--display)", fontSize: 21, marginTop: 28 },
 
   footer: { background: C.ink, color: C.cream, padding: "58px 30px 42px", textAlign: "center" },
   footerBrand: { display: "inline-flex", alignItems: "center", gap: 10, marginBottom: 16 },
