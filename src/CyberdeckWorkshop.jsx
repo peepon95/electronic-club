@@ -5,25 +5,15 @@ import "./cyberdeck-workshop.css";
 const repoUrl = siteConfig.cyberdeckRepository;
 const releaseUrl = `${repoUrl}/releases/latest`;
 const archiveUrl = `${releaseUrl}/download/cyberdeck-workshop.zip`;
-const checksumUrl = `${releaseUrl}/download/SHA256SUMS`;
 const piZero2Url = "https://my.cytron.io/p-raspberry-pi-zero-2-w-with-header";
 const piZeroWhUrl = "https://my.cytron.io/p-raspberry-pi-zero-wh-with-header";
 const screenUrl = "https://my.cytron.io/p-3.5-inch-tft-touch-screen-for-rpi-3b-3b-plus-4b";
-
-const sessionSteps = [
-  ["01", "PREP", "Gather the kit", "Use the linked reference board and screen, then turn on a 2.4GHz phone hotspot."],
-  ["02", "FLASH", "Prepare the card", "Use Raspberry Pi Imager to save the hotspot, hostname, username, password and SSH settings."],
-  ["03", "CONNECT", "Reach the Pi", "Boot the deck and connect from your Mac or Windows laptop over SSH."],
-  ["04", "DISPLAY", "Light the screen", "Install the driver for the tested Cytron touchscreen and confirm touch input."],
-  ["05", "INSTALL", "Load the deck", "Download cyberdeck-workshop.zip, run its checks, install the apps and reboot."],
-  ["06", "PLAY", "Make it yours", "Try the games, improve one small thing, and take the workflow home."],
-];
 
 const equipment = [
   {
     name: "Raspberry Pi Zero 2 W with header",
     note: "The fully supported workshop board. Its pre-soldered header accepts the GPIO screen.",
-    price: "RM89 · check stock",
+    price: "RM89",
     link: piZero2Url,
   },
   {
@@ -33,14 +23,12 @@ const equipment = [
     link: screenUrl,
   },
   {
-    name: "16GB+ microSD card + reader",
+    name: "16GB microSD card + reader",
     note: "The card becomes the Pi's storage. Bring a reader that works with your laptop.",
-    price: "est. RM20–35",
   },
   {
-    name: "Stable 5V/2A micro-USB power",
-    note: "Use a suitable power bank or wall plug and a known-good cable.",
-    price: "est. RM15–40",
+    name: "Micro-USB power wire",
+    note: "Use a reliable wire with a suitable 5V/2A power bank or wall plug.",
   },
   {
     name: "Mac or Windows laptop",
@@ -62,7 +50,7 @@ const equipment = [
 
 const compatibility = [
   ["Pi Zero 2 W with header", "Fully supported", "The board used in the workshop. It matches the tested size, GPIO header, power arrangement and every instruction.", piZero2Url],
-  ["Pi Zero W / Zero WH", "Experimental", "Cytron listed the linked Zero WH at RM79: only RM10 less, but substantially slower. It was out of stock when checked, and animation-heavy games may stutter.", piZeroWhUrl],
+  ["Pi Zero W / Zero WH", "Experimental", "The workshop uses the Pi Zero 2 W with header. If you choose a Zero W or Zero WH, you will need to explore and troubleshoot its setup and performance on your own. Animation-heavy games may stutter.", piZeroWhUrl],
 ];
 
 const gameIdeas = [
@@ -76,7 +64,7 @@ const gameIdeas = [
 const troubleshooting = [
   ["SSH cannot find the hostname", "Check that the Pi and laptop use the same network. If local names fail, find the Pi's IP in the router or hotspot device list and use that address."],
   ["Host key changed after reflashing", "Remove only the saved key for that hostname with ssh-keygen -R yourhostname.local, then reconnect and verify the new key."],
-  ["Screen stays white", "Shut down, disconnect power and reseat the linked screen carefully. Reconnect by SSH, confirm SPI is enabled, then rerun the LCD35-show installer for this exact display."],
+  ["Screen stays white", "The games are written in Python, but a white screen happens before the Python menu can draw. Shut down, disconnect power, reseat the linked screen carefully, reconnect by SSH and rerun the display setup for this exact screen."],
   ["Touches land in the wrong place", "Use the calibration instructions linked on the Cytron screen page. Do not copy another participant's calibration numbers; each screen can differ."],
   ["Optional keyboard is missing", "Finish the first workshop using SSH and touch. Later, a wired keyboard needs the Pi's USB data port and an OTG adapter; Bluetooth models need pairing and enough battery."],
   ["A game is slow", "Keep graphics and per-frame work simple. Test each change on the Pi, not only on the laptop."],
@@ -172,45 +160,11 @@ export default function CyberdeckWorkshop() {
                 VIEW SOURCE ON GITHUB ↗
               </a>
             </div>
-            <p className="cd-release-note">
-              Download <strong>cyberdeck-workshop.zip</strong>—this is the prepared workshop
-              package. <a href={checksumUrl}>SHA256SUMS</a> is optional. On GitHub, ignore the
-              automatic “Source code” ZIP and TAR files.
-            </p>
           </div>
-          <aside className="cd-hero-card" aria-label="Known-good workshop build">
-            <span className="cd-sticker">KNOWN-GOOD BUILD</span>
-            <dl>
-              <div><dt>Board</dt><dd>Pi Zero 2 W with header</dd></div>
-              <div><dt>Screen</dt><dd>3.5″ · 480×320 · GPIO</dd></div>
-              <div><dt>Touch</dt><dd>XPT2046 / ADS7846 + stylus</dd></div>
-              <div><dt>Controls</dt><dd>Touch + stylus</dd></div>
-              <div><dt>Core</dt><dd>Python on Raspberry Pi OS</dd></div>
-            </dl>
-            <p>A direct keyboard is optional in the first workshop. Your laptop handles the setup over SSH.</p>
-          </aside>
         </header>
 
-        <section className="cd-session" aria-labelledby="session-title">
-          <SectionTitle kicker="YOUR HALF-DAY ROUTE" light>
-            <span id="session-title">ONE WORKING DECK. ONE GAME YOU MAKE YOURS.</span>
-          </SectionTitle>
-          <div className="cd-session-grid">
-            {sessionSteps.map(([number, time, title, text]) => (
-              <article key={number} className="cd-session-card">
-                <div className="cd-session-meta"><span>{number}</span><time>{time}</time></div>
-                <h3>{title}</h3>
-                <p>{text}</p>
-              </article>
-            ))}
-          </div>
-          <p className="cd-session-rule">
-            The core win is a deck that boots and plays. Customising comes after that foundation works.
-          </p>
-        </section>
-
         <section id="equipment" className="cd-section">
-          <SectionTitle kicker="PACK THIS BEFORE THE DAY">ONE TESTED KIT. CLEAR COSTS.</SectionTitle>
+          <SectionTitle kicker="PACK THIS BEFORE THE DAY">WHAT YOU NEED.</SectionTitle>
           <div className="cd-equipment-layout">
             <div className="cd-equipment-list">
               {equipment.map((item) => (
@@ -221,7 +175,7 @@ export default function CyberdeckWorkshop() {
                   <div>
                     <div className="cd-equipment-title">
                       <h3>{item.name}</h3>
-                      <span>{item.price}</span>
+                      {item.price && <span>{item.price}</span>}
                     </div>
                     <p>{item.note}</p>
                     {item.link && (
@@ -233,21 +187,6 @@ export default function CyberdeckWorkshop() {
                 </article>
               ))}
             </div>
-            <aside className="cd-cost-card" aria-label="Estimated workshop cost">
-              <p className="cd-note-label">ESTIMATED MATERIAL COST</p>
-              <h3>RM174–189 for the core deck.</h3>
-              <dl>
-                <div><dt>Pi Zero 2 W with header</dt><dd>RM89</dd></div>
-                <div><dt>Screen + included pen</dt><dd>RM65</dd></div>
-                <div><dt>16GB+ microSD</dt><dd>RM20–35</dd></div>
-              </dl>
-              <hr />
-              <p>
-                If you also need power, budget roughly <strong>RM189–229 total</strong>.
-                Laptop and phone are assumed to be your own. Keyboard is optional.
-              </p>
-              <small>Prices checked 2 August 2026. Both Pi board links showed out of stock at that time; use “Notify me” or find the same model and header specification elsewhere. Prices and stock can change.</small>
-            </aside>
           </div>
         </section>
 
@@ -256,8 +195,8 @@ export default function CyberdeckWorkshop() {
             <span id="compat-title">TWO BOARD CHOICES. ONE WORKSHOP STANDARD.</span>
           </SectionTitle>
           <p className="cd-compat-intro">
-            The workshop uses the Pi Zero 2 W with header. The cheaper Zero WH can run the
-            same Python package, but it is slower and is not the board used for group troubleshooting.
+            In the workshop we will use the Pi Zero 2 W with header. The Zero W and Zero WH
+            are experimental alternatives that participants must explore independently.
           </p>
           <div className="cd-compat-list">
             {compatibility.map(([board, status, note, link], index) => (
@@ -273,7 +212,7 @@ export default function CyberdeckWorkshop() {
         </section>
 
         <section id="setup" className="cd-section">
-          <SectionTitle kicker="FOLLOW 1 THROUGH 6">FROM BLANK CARD TO WORKING DECK.</SectionTitle>
+          <SectionTitle kicker="FOLLOW 1 THROUGH 7">STEP BY STEP GUIDE.</SectionTitle>
           <ol className="cd-setup-list">
             <li>
               <div className="cd-step-number">1</div>
@@ -381,13 +320,6 @@ export default function CyberdeckWorkshop() {
                     <Code>cd cyberdeck-download</Code>
                     <Code>curl -fL -o cyberdeck-workshop.zip {archiveUrl}</Code>
                   </div>
-                  <details className="cd-optional-check">
-                    <summary>Optional: verify the ZIP checksum <span>+</span></summary>
-                    <p>This confirms that the download was not corrupted.</p>
-                    <Code>curl -fL -o SHA256SUMS {checksumUrl}</Code>
-                    <Code>sha256sum -c SHA256SUMS</Code>
-                    <p>Continue when it says <code>cyberdeck-workshop.zip: OK</code>.</p>
-                  </details>
                   <div>
                     <strong>Extract and run the package checks</strong>
                     <Code>unzip -o cyberdeck-workshop.zip</Code>
@@ -400,14 +332,6 @@ export default function CyberdeckWorkshop() {
                     <Code>sudo ./install.sh</Code>
                     <p>Press Enter to install every game, or enter the numbers of the games you want.</p>
                   </div>
-                </div>
-                <div className="cd-download-note">
-                  <strong>Which GitHub file?</strong>
-                  <p>
-                    Use <a href={archiveUrl}>cyberdeck-workshop.zip</a>. The checksum is optional.
-                    Ignore “Source code (zip)” and “Source code (tar.gz)”—GitHub creates those automatically,
-                    and they are not the prepared workshop download.
-                  </p>
                 </div>
               </div>
             </li>
@@ -422,6 +346,23 @@ export default function CyberdeckWorkshop() {
                   selects an app, and Chinese Lingo and Makan Ninja respond to touch. A wired or
                   Bluetooth keyboard is optional; set one up later if you want typing and arrow controls.
                 </p>
+              </div>
+            </li>
+            <li>
+              <div className="cd-step-number">7</div>
+              <div>
+                <h3>Shut down before you pull power</h3>
+                <p>
+                  The Pi may still be writing to the microSD card. Pulling power while it runs can
+                  corrupt files. In your SSH terminal, run these commands in order:
+                </p>
+                <Code>sync</Code>
+                <Code>sync</Code>
+                <Code>sudo shutdown now</Code>
+                <div className="cd-warning">
+                  Wait until the green activity light has completely stopped blinking. Only then
+                  unplug the Micro-USB power wire.
+                </div>
               </div>
             </li>
           </ol>
@@ -468,23 +409,6 @@ export default function CyberdeckWorkshop() {
                 <p>{fix}</p>
               </details>
             ))}
-          </div>
-        </section>
-
-        <section className="cd-shutdown" aria-labelledby="shutdown-title">
-          <div>
-            <p className="cd-kicker">THE HABIT THAT SAVES YOUR WORK</p>
-            <h2 id="shutdown-title">SHUT DOWN BEFORE YOU PULL POWER.</h2>
-            <p>
-              The Pi may still be writing to the microSD card. Pulling power while it runs can corrupt
-              files. In your SSH terminal, run these commands and wait for the green activity light to stop.
-            </p>
-          </div>
-          <div className="cd-shutdown-code" aria-label="Safe shutdown commands">
-            <Code>sync</Code>
-            <Code>sync</Code>
-            <Code>sudo shutdown now</Code>
-            <strong>Wait for the green light to stop. Then unplug power.</strong>
           </div>
         </section>
 
