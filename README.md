@@ -30,6 +30,10 @@ links to it from both the navigation and the Cyberdeck Part 1 card.
 buttons. Keep the download button pointed at a tested GitHub Release rather than
 the moving `main` branch.
 
+The current page labels `v0.1.0-test` as an independent-testing build. Update
+that wording when a fresh-card test is complete and the first workshop-ready
+release is published.
+
 ## Deploy
 
 It's a static Vite site, so any static host works.

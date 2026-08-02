@@ -160,15 +160,15 @@ export default function CyberdeckWorkshop() {
             </p>
             <div className="cd-actions" aria-label="Workshop downloads">
               <a className="cd-button cd-button--primary" href={releaseUrl} target="_blank" rel="noreferrer">
-                DOWNLOAD LATEST RELEASE ↗
+                DOWNLOAD v0.1.0 TEST RELEASE ↗
               </a>
               <a className="cd-button cd-button--outline" href={repoUrl} target="_blank" rel="noreferrer">
                 VIEW SOURCE ON GITHUB ↗
               </a>
             </div>
             <p className="cd-release-note">
-              Use the latest Release for workshop day. The repository is for reading,
-              learning and making your own copy.
+              v0.1.0-test is for independent friend testing, not the final public-workshop
+              release. The repository is for reading, learning and making your own copy.
             </p>
           </div>
           <aside className="cd-hero-card" aria-label="Known-good workshop build">
@@ -314,13 +314,13 @@ export default function CyberdeckWorkshop() {
               <div>
                 <h3>Install the workshop release</h3>
                 <p>
-                  Download the latest tested Release—not a random copy of the main branch. Open its
-                  release notes, confirm that your Pi, display and OS match, then follow the installer
-                  commands published with that release.
+                  Download the current test Release—not a random copy of the main branch. Open its
+                  release notes, confirm that your Pi, display and OS match, then follow the friend
+                  testing checklist included with the package.
                 </p>
                 <div className="cd-actions cd-actions--left">
                   <a className="cd-button cd-button--primary" href={releaseUrl} target="_blank" rel="noreferrer">
-                    OPEN THE LATEST RELEASE ↗
+                    OPEN THE TEST RELEASE ↗
                   </a>
                 </div>
                 <div className="cd-warning">
@@ -439,7 +439,7 @@ export default function CyberdeckWorkshop() {
           </p>
           <div className="cd-actions">
             <a className="cd-button cd-button--primary" href={releaseUrl} target="_blank" rel="noreferrer">
-              GET THE WORKSHOP RELEASE ↗
+              GET THE TEST RELEASE ↗
             </a>
             <a className="cd-button cd-button--outline" href="/">BACK TO WALLFLOWER PROJECT</a>
           </div>
