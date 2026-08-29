@@ -379,6 +379,61 @@ export default function CyberdeckWorkshop() {
                   5GHz-only network. Give the hotspot a simple name and password, then connect your
                   laptop to that same hotspot.
                 </p>
+                <details className="cd-help-dropdown">
+                  <summary>How do I enter my phone hotspot in Raspberry Pi Imager?</summary>
+                  <div className="cd-help-dropdown-content">
+                    <p>
+                      Turn on your phone hotspot first. On the Imager&apos;s <strong>Choose Wi-Fi</strong>
+                      screen, enter the hotspot details exactly as they appear on your phone:
+                    </p>
+                    <dl className="cd-wifi-fields">
+                      <div>
+                        <dt>Network type</dt>
+                        <dd>Choose <strong>Secure Network</strong>.</dd>
+                      </div>
+                      <div>
+                        <dt>SSID</dt>
+                        <dd>Enter the exact name of your phone hotspot.</dd>
+                      </div>
+                      <div>
+                        <dt>Password</dt>
+                        <dd>Enter your hotspot password, then enter it again to confirm.</dd>
+                      </div>
+                      <div>
+                        <dt>Hidden SSID</dt>
+                        <dd>Leave this unchecked.</dd>
+                      </div>
+                    </dl>
+                    <div className="cd-hotspot-platforms">
+                      <div>
+                        <strong>iPhone</strong>
+                        <p>
+                          Go to Settings → Personal Hotspot. Turn on <strong>Allow Others to
+                          Join</strong> and <strong>Maximise Compatibility</strong>.
+                        </p>
+                      </div>
+                      <div>
+                        <strong>Android</strong>
+                        <p>
+                          Open the Wi-Fi hotspot settings and select <strong>2.4 GHz</strong> for
+                          AP band, frequency band or compatibility mode. The wording varies by phone.
+                        </p>
+                      </div>
+                    </div>
+                    <div className="cd-hotspot-note">
+                      <strong>Can my phone still use 5G?</strong>
+                      <p>
+                        Yes. <strong>5G</strong> is your phone&apos;s mobile-data connection;
+                        <strong> 5 GHz</strong> is a Wi-Fi frequency. Your phone can receive internet
+                        over 5G while sharing it with the Pi over a compatible 2.4 GHz hotspot.
+                      </p>
+                    </div>
+                    <p className="cd-small">
+                      Connect your laptop to this same hotspot before continuing. Capital letters,
+                      spaces and punctuation in the hotspot name and password must match exactly.
+                    </p>
+                  </div>
+                </details>
                 <div className="cd-info-card">
                   <strong>Is the Pi tied to one local network?</strong>
                   <p>

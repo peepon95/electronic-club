@@ -603,6 +603,111 @@ body {
   margin-bottom: 0;
 }
 
+.cd-help-dropdown {
+  margin-top: 20px;
+  overflow: hidden;
+  border: 2px solid var(--cd-card-border);
+  border-radius: var(--cd-card-radius);
+  background: var(--cd-card-bg);
+}
+
+.cd-help-dropdown summary {
+  position: relative;
+  padding: 18px 52px 18px var(--cd-card-padding);
+  color: var(--cd-blue);
+  cursor: pointer;
+  font-family: var(--cd-display);
+  font-size: 19px;
+  letter-spacing: 0.3px;
+  list-style: none;
+  text-transform: uppercase;
+}
+
+.cd-help-dropdown summary::-webkit-details-marker {
+  display: none;
+}
+
+.cd-help-dropdown summary::after {
+  position: absolute;
+  top: 50%;
+  right: 20px;
+  content: "+";
+  font-family: var(--cd-body);
+  font-size: 26px;
+  font-weight: 600;
+  line-height: 1;
+  transform: translateY(-50%);
+}
+
+.cd-help-dropdown[open] summary {
+  border-bottom: 2px solid var(--cd-card-border);
+}
+
+.cd-help-dropdown[open] summary::after {
+  content: "−";
+}
+
+.cd-help-dropdown-content {
+  padding: var(--cd-card-padding);
+}
+
+.cd-help-dropdown-content > p:first-child {
+  margin-top: 0;
+}
+
+.cd-wifi-fields {
+  display: grid;
+  gap: 0;
+  margin: 18px 0;
+  border-top: 1px solid var(--cd-card-border);
+}
+
+.cd-wifi-fields > div {
+  display: grid;
+  grid-template-columns: minmax(120px, 0.3fr) 1fr;
+  gap: 18px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--cd-card-border);
+}
+
+.cd-wifi-fields dt {
+  color: var(--cd-coral-text);
+  font-weight: 700;
+}
+
+.cd-wifi-fields dd {
+  margin: 0;
+}
+
+.cd-hotspot-platforms {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-top: 18px;
+}
+
+.cd-hotspot-platforms > div,
+.cd-hotspot-note {
+  padding: 16px;
+  border: 1px solid var(--cd-card-border);
+  border-radius: 10px;
+  background: var(--cd-cream);
+}
+
+.cd-hotspot-platforms strong,
+.cd-hotspot-note > strong {
+  color: var(--cd-blue);
+}
+
+.cd-hotspot-platforms p,
+.cd-hotspot-note p {
+  margin: 7px 0 0;
+}
+
+.cd-hotspot-note {
+  margin-top: 12px;
+}
+
 .cd-os-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -902,9 +1007,15 @@ body {
   }
 
   .cd-os-grid,
+  .cd-hotspot-platforms,
   .cd-compat-list,
   .cd-games-grid {
     grid-template-columns: 1fr;
+  }
+
+  .cd-wifi-fields > div {
+    grid-template-columns: 1fr;
+    gap: 4px;
   }
 }
 
