@@ -599,9 +599,19 @@ cd cyberdeck-workshop
                     <Code>{`./install.sh --list
 sudo ./install.sh`}</Code>
                     <p>
-                      Enter the numbers of the two games you picked. The installer also enables the
-                      Cyberdeck menu to start automatically whenever the Pi boots. You can run it
-                      again later to add more games.
+                      Enter the numbers of the two games you picked, or press Enter to install all
+                      eight. You can run the installer again later to add more games.
+                    </p>
+                  </div>
+                  <div>
+                    <strong>Start and verify the Cyberdeck menu</strong>
+                    <Code>{`sudo systemctl enable --now cyberdeck-menu.service
+sleep 3
+systemctl --no-pager --full status cyberdeck-menu.service`}</Code>
+                    <p>
+                      Look for <strong>Active: active (running)</strong>. The login prompt on the
+                      small screen should now change to the full-screen <strong>CYBERDECK 2.0</strong>
+                      menu showing the games you installed.
                     </p>
                   </div>
                 </div>
@@ -610,13 +620,17 @@ sudo ./install.sh`}</Code>
             <li>
               <div className="cd-step-number">6</div>
               <div>
-                <h3>Reboot, touch and play</h3>
-                <p>Restart once the installer finishes. Your SSH connection will close again.</p>
+                <h3>Reboot and confirm automatic startup</h3>
+                <p>
+                  Once the menu appears, restart the Pi to prove that it will launch automatically
+                  on future boots. Your SSH connection will close again.
+                </p>
                 <Code>sudo reboot</Code>
                 <p>
-                  Wait two minutes. Confirm that <strong>CYBERDECK 2.0</strong> appears, the stylus
-                  selects an app, and both games you chose open and respond to their controls. A wired
-                  or Bluetooth keyboard is optional; set one up later if you want typing and arrow controls.
+                  Wait up to two minutes. Confirm that <strong>CYBERDECK 2.0</strong> returns without
+                  logging in on the small screen, the stylus selects an app, and both games you chose
+                  open and respond to their controls. A wired or Bluetooth keyboard is optional; set
+                  one up later if you want typing and arrow controls.
                 </p>
                 <div className="cd-info-card">
                   <strong>Adding a Bluetooth keyboard later?</strong>
