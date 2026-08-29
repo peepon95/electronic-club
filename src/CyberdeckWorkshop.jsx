@@ -482,10 +482,23 @@ cd cyberdeck-workshop
 ./scripts/check.sh`}</Code>
                   </div>
                   <div>
+                    <strong>Confirm that the touchscreen really responds</strong>
+                    <Code>sudo ./scripts/check-touch.sh</Code>
+                    <p>
+                      Tap, press and drag with the stylus during the ten-second test. Continue only
+                      when it reports <strong>[OK] Touchscreen responded</strong>. Seeing the menu or
+                      the ADS7846 driver alone does not confirm that the touch layer works.
+                    </p>
+                  </div>
+                  <div>
                     <strong>Choose the games for your deck</strong>
                     <Code>{`./install.sh --list
 sudo ./install.sh`}</Code>
-                    <p>Enter the numbers of the two games you picked. You can run the installer again later to add more.</p>
+                    <p>
+                      Enter the numbers of the two games you picked. The installer also enables the
+                      Cyberdeck menu to start automatically whenever the Pi boots. You can run it
+                      again later to add more games.
+                    </p>
                   </div>
                 </div>
               </div>
@@ -501,6 +514,15 @@ sudo ./install.sh`}</Code>
                   selects an app, and both games you chose open and respond to their controls. A wired
                   or Bluetooth keyboard is optional; set one up later if you want typing and arrow controls.
                 </p>
+                <div className="cd-info-card">
+                  <strong>Adding a Bluetooth keyboard later?</strong>
+                  <p>
+                    Pair and trust it once, note its MAC address, then use the included optional
+                    reconnect installer. Replace the example address with your keyboard's address:
+                  </p>
+                  <Code>sudo ./scripts/install-keyboard-reconnect.sh AA:BB:CC:DD:EE:FF</Code>
+                  <p>The keyboard must still be charged and switched on.</p>
+                </div>
               </div>
             </li>
             <li>

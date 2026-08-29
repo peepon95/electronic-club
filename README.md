@@ -32,7 +32,9 @@ the latest GitHub Release rather than the moving `main` branch. Visitors enter
 their email through the guide's download gate before the file is released.
 
 The installation section mirrors the release README: download the ZIP, run the
-software checks, choose apps, install, reboot and shut down safely.
+software and raw touchscreen checks, choose apps, install the automatic boot
+menu, reboot and shut down safely. Optional Bluetooth keyboard reconnect is
+kept after the core touch-first setup.
 Prepare future changes in a branch and Vercel preview; merge and promote them only
 after the site owner approves the preview.
 
