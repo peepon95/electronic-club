@@ -595,12 +595,12 @@ cd cyberdeck-workshop
                     </p>
                   </div>
                   <div>
-                    <strong>Choose the games for your deck</strong>
+                    <strong>Install all eight games</strong>
                     <Code>{`./install.sh --list
-sudo ./install.sh`}</Code>
+sudo ./install.sh --all`}</Code>
                     <p>
-                      Enter the numbers of the two games you picked, or press Enter to install all
-                      eight. You can run the installer again later to add more games.
+                      Part 1 gives every participant the same complete deck. Explore all eight games
+                      after setup, then choose what you want to change or rebuild in Part 2.
                     </p>
                   </div>
                   <div>
@@ -628,19 +628,9 @@ systemctl --no-pager --full status cyberdeck-menu.service`}</Code>
                 <Code>sudo reboot</Code>
                 <p>
                   Wait up to two minutes. Confirm that <strong>CYBERDECK 2.0</strong> returns without
-                  logging in on the small screen, the stylus selects an app, and both games you chose
-                  open and respond to their controls. A wired or Bluetooth keyboard is optional; set
-                  one up later if you want typing and arrow controls.
+                  logging in on the small screen, the stylus selects an app, and at least two games
+                  open and respond to their controls.
                 </p>
-                <div className="cd-info-card">
-                  <strong>Adding a Bluetooth keyboard later?</strong>
-                  <p>
-                    Pair and trust it once, note its MAC address, then use the included optional
-                    reconnect installer. Replace the example address with your keyboard's address:
-                  </p>
-                  <Code>sudo ./scripts/install-keyboard-reconnect.sh AA:BB:CC:DD:EE:FF</Code>
-                  <p>The keyboard must still be charged and switched on.</p>
-                </div>
               </div>
             </li>
             <li>
@@ -661,13 +651,23 @@ sudo shutdown now`}</Code>
               </div>
             </li>
           </ol>
+          <div className="cd-info-card">
+            <strong>Optional: add a Bluetooth keyboard later</strong>
+            <p>
+              A keyboard is not needed for the Part 1 setup. If you add one later, pair and trust it
+              once, note its MAC address, then use the included reconnect installer. Replace the
+              example address with your keyboard's address:
+            </p>
+            <Code>sudo ./scripts/install-keyboard-reconnect.sh AA:BB:CC:DD:EE:FF</Code>
+            <p>The keyboard must still be charged and switched on.</p>
+          </div>
         </section>
 
         <section id="games" className="cd-customise">
-          <SectionTitle kicker="GAMES INCLUDED IN THE PACK">PICK TWO GAMES YOU LIKE.</SectionTitle>
+          <SectionTitle kicker="GAMES INCLUDED IN THE PACK">EXPLORE ALL EIGHT.</SectionTitle>
           <p className="cd-customise-lede">
-            Cyberdeck 2.0 includes eight ready-to-play apps. Choose any two during Part 1.
-            You can run the installer again and add the others whenever you are ready.
+            Part 1 installs every ready-to-play app so everyone leaves with the complete Cyberdeck.
+            Try them all, find your favourites, and bring your ideas into Part 2.
           </p>
           <div className="cd-games-grid">
             {includedGames.map(([name, description]) => (
