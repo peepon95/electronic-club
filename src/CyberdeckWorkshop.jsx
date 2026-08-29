@@ -503,25 +503,27 @@ export default function CyberdeckWorkshop() {
             <li>
               <div className="cd-step-number">4</div>
               <div>
-                <h3>Install the linked Cytron screen driver</h3>
+                <h3>Enable the linked Cytron screen</h3>
                 <p>
-                  These commands follow the driver method on the linked Cytron product page for this
-                  exact screen. The fresh Lite image does not include Git, so the first two commands
-                  install it. Run the complete block inside the SSH session. The final command
-                  restarts the Pi automatically, so your SSH window will disconnect.
+                  This workshop uses only the display overlay needed by Cyberdeck 2.0. It avoids the
+                  older all-in-one installer, which changes unrelated Raspberry Pi packages. Run the
+                  complete block inside SSH. The checksum protects against a changed or incomplete
+                  download. The final command restarts the Pi, so SSH will disconnect.
                 </p>
-                <Code>{`sudo raspi-config nonint do_spi 0
-sudo apt update
-sudo apt install -y git
-cd ~
-git clone --depth 1 https://github.com/goodtft/LCD-show.git
-cd LCD-show
-chmod +x LCD35-show
-sudo ./LCD35-show`}</Code>
+                <Code>{`cd ~ &&
+wget -O tft35a.dtbo https://raw.githubusercontent.com/goodtft/LCD-show/a36c00a55e11f0de3b4be0e66f0a2cec47076e23/usr/tft35a-overlay.dtb &&
+echo "601ea7056da5d7864648798fd3656b4205f01d6b9a6a8a5cfad6ca5601bbbe1e  tft35a.dtbo" | sha256sum -c - &&
+sudo install -m 0644 tft35a.dtbo /boot/overlays/tft35a.dtbo &&
+(grep -q '^dtparam=spi=on$' /boot/firmware/config.txt || echo 'dtparam=spi=on' | sudo tee -a /boot/firmware/config.txt) &&
+(grep -q '^dtoverlay=tft35a:rotate=90$' /boot/firmware/config.txt || echo 'dtoverlay=tft35a:rotate=90' | sudo tee -a /boot/firmware/config.txt) &&
+sudo reboot`}</Code>
                 <div className="cd-warning">
-                  Use this driver only with the linked 3.5-inch Cytron screen. After the reboot,
-                  wait two minutes, reconnect by SSH and confirm that the console appears on the display.
+                  Use this only with the linked 3.5-inch Cytron screen. After rebooting, the screen
+                  may stay white until Cyberdeck 2.0 draws directly to it in Step 5. Wait two minutes,
+                  reconnect by SSH and run the checks below before continuing.
                 </div>
+                <Code>{`test -e /dev/fb1 && echo "[OK] Display framebuffer ready"
+grep -A 6 -i "ADS7846 Touchscreen" /proc/bus/input/devices`}</Code>
               </div>
             </li>
             <li>
