@@ -604,14 +604,14 @@ sudo ./install.sh --all`}</Code>
                     </p>
                   </div>
                   <div>
-                    <strong>Start and verify the Cyberdeck menu</strong>
-                    <Code>{`sudo systemctl enable --now cyberdeck-menu.service
-sleep 3
-systemctl --no-pager --full status cyberdeck-menu.service`}</Code>
+                    <strong>Verify automatic menu startup</strong>
+                    <Code>{`systemctl is-enabled cyberdeck-menu.service
+systemctl is-active cyberdeck-menu.service`}</Code>
                     <p>
-                      Look for <strong>Active: active (running)</strong>. The login prompt on the
-                      small screen should now change to the full-screen <strong>CYBERDECK 2.0</strong>
-                      menu showing the games you installed.
+                      Look for <strong>enabled</strong> and <strong>active</strong>. The installer starts
+                      the full-screen <strong>CYBERDECK 2.0</strong> menu immediately and reserves the
+                      small display for it, so the Raspberry Pi login prompt cannot draw over the menu.
+                      SSH remains available whenever you need to make changes.
                     </p>
                   </div>
                 </div>
@@ -629,7 +629,8 @@ systemctl --no-pager --full status cyberdeck-menu.service`}</Code>
                 <p>
                   Wait up to two minutes. Confirm that <strong>CYBERDECK 2.0</strong> returns without
                   logging in on the small screen, the stylus selects an app, and at least two games
-                  open and respond to their controls.
+                  open and respond to their controls. From now on, powering the deck starts directly
+                  at this menu so it is ready to play.
                 </p>
               </div>
             </li>
