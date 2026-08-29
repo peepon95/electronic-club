@@ -522,7 +522,15 @@ sudo reboot`}</Code>
                   may stay white until Cyberdeck 2.0 draws directly to it in Step 5. Wait two minutes,
                   reconnect by SSH and run the checks below before continuing.
                 </div>
-                <Code>{`test -e /dev/fb1 && echo "[OK] Display framebuffer ready"
+                <Code>{`FB_DEVICE=""
+for candidate in /dev/fb1 /dev/fb0; do
+  if [ -e "$candidate" ]; then FB_DEVICE="$candidate"; break; fi
+done
+if [ -n "$FB_DEVICE" ]; then
+  echo "[OK] Display framebuffer ready: $FB_DEVICE"
+else
+  echo "[FAIL] Display framebuffer missing"
+fi
 grep -A 6 -i "ADS7846 Touchscreen" /proc/bus/input/devices`}</Code>
               </div>
             </li>
