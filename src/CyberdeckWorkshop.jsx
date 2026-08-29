@@ -407,10 +407,22 @@ export default function CyberdeckWorkshop() {
                     <div className="cd-hotspot-platforms">
                       <div>
                         <strong>iPhone</strong>
-                        <p>
-                          Go to Settings → Personal Hotspot. Turn on <strong>Allow Others to
-                          Join</strong> and <strong>Maximise Compatibility</strong>.
-                        </p>
+                        <ol className="cd-hotspot-steps">
+                          <li>
+                            Open Settings → General → About → Name. This is the hotspot name you
+                            will enter as the <strong>SSID</strong>.
+                          </li>
+                          <li>Open Settings → Personal Hotspot.</li>
+                          <li>Turn on <strong>Allow Others to Join</strong>.</li>
+                          <li>
+                            Turn on <strong>Maximise Compatibility</strong>. The iPhone chooses the
+                            compatible 2.4 GHz Wi-Fi band for you.
+                          </li>
+                          <li>
+                            Enter the displayed Wi-Fi Password in Imager and keep the Personal
+                            Hotspot screen open while the Pi connects for the first time.
+                          </li>
+                        </ol>
                       </div>
                       <div>
                         <strong>Android</strong>

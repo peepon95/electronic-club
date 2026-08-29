@@ -704,6 +704,15 @@ body {
   margin: 7px 0 0;
 }
 
+.cd-hotspot-steps {
+  margin: 10px 0 0;
+  padding-left: 21px;
+}
+
+.cd-hotspot-steps li + li {
+  margin-top: 8px;
+}
+
 .cd-hotspot-note {
   margin-top: 12px;
 }
