@@ -531,7 +531,34 @@ if [ -n "$FB_DEVICE" ]; then
 else
   echo "[FAIL] Display framebuffer missing"
 fi
-grep -A 6 -i "ADS7846 Touchscreen" /proc/bus/input/devices`}</Code>
+
+TOUCH_EVENT=$(awk '
+  /^N: Name="ADS7846 Touchscreen"/ { found=1; next }
+  found && /^H: Handlers=/ {
+    for (i=1; i<=NF; i++) if ($i ~ /^event[0-9]+$/) { print $i; exit }
+  }
+  found && /^$/ { found=0 }
+' /proc/bus/input/devices)
+
+if [ -z "$TOUCH_EVENT" ]; then
+  echo "[FAIL] ADS7846 touchscreen device missing"
+else
+  TOUCH_CAPTURE=$(sudo mktemp /tmp/cyberdeck-touch.XXXXXX)
+  echo "Tap and drag with the stylus for 10 seconds..."
+  sudo timeout 10 dd if="/dev/input/$TOUCH_EVENT" of="$TOUCH_CAPTURE" bs=24 status=none || true
+  TOUCH_BYTES=$(sudo wc -c "$TOUCH_CAPTURE" | awk '{print $1}')
+  sudo rm -f "$TOUCH_CAPTURE"
+  if [ "$TOUCH_BYTES" -gt 0 ]; then
+    echo "[OK] Touchscreen responded: $TOUCH_BYTES bytes"
+  else
+    echo "[FAIL] No physical touchscreen signal detected"
+  fi
+fi`}</Code>
+                <div className="cd-warning">
+                  Continue to Step 5 only when both the framebuffer and touchscreen report
+                  <strong> [OK]</strong>. If touch fails, shut down before reseating the GPIO screen.
+                  A detected ADS7846 device alone does not prove that physical taps are reaching the Pi.
+                </div>
               </div>
             </li>
             <li>
