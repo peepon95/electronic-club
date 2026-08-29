@@ -506,10 +506,13 @@ export default function CyberdeckWorkshop() {
                 <h3>Install the linked Cytron screen driver</h3>
                 <p>
                   These commands follow the driver method on the linked Cytron product page for this
-                  exact screen. Run them inside the SSH session. The final command restarts the Pi
-                  automatically, so your SSH window will disconnect.
+                  exact screen. The fresh Lite image does not include Git, so the first two commands
+                  install it. Run the complete block inside the SSH session. The final command
+                  restarts the Pi automatically, so your SSH window will disconnect.
                 </p>
                 <Code>{`sudo raspi-config nonint do_spi 0
+sudo apt update
+sudo apt install -y git
 cd ~
 git clone --depth 1 https://github.com/goodtft/LCD-show.git
 cd LCD-show
