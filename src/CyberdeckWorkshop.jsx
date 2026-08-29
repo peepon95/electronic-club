@@ -484,20 +484,17 @@ export default function CyberdeckWorkshop() {
                 <h3>Fit the screen, boot and connect</h3>
                 <p>
                   With power disconnected, carefully align the display on GPIO pins 1–26. Insert the
-                  card, power the Pi and wait up to two minutes. In Terminal or PowerShell, use the
-                  hostname and username you created:
+                  card, turn on the phone hotspot and keep its settings screen open. Connect the laptop
+                  to that same hotspot, power the Pi and wait up to three minutes. In Terminal or
+                  PowerShell, use the hostname and username you created:
                 </p>
                 <Code>ssh yourusername@yourhostname.local</Code>
                 <p className="cd-small">
                   Type <strong>yes</strong> if asked to trust the new host. Your password will not
-                  appear while you type—that is normal. If the hostname fails, find the Pi's IP in
-                  your hotspot device list and use <code>ssh yourusername@192.168.x.x</code>.
+                  appear while you type—that is normal. The SSH command is the same on a hotspot.
+                  If it hangs, press Control+C, confirm that both devices are on the same hotspot,
+                  power-cycle the Pi while the hotspot is already active, wait three minutes and retry.
                 </p>
-                <div className="cd-info-card">
-                  <strong>Reconnect to your phone hotspot later</strong>
-                  <p>Once connected by SSH, you can save your phone hotspot without reflashing:</p>
-                  <Code>sudo nmcli dev wifi connect "YOUR_HOTSPOT_NAME" password "YOUR_HOTSPOT_PASSWORD"</Code>
-                </div>
               </div>
             </li>
             <li>
